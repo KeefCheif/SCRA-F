@@ -1,0 +1,588 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92162835823000F60437 /* SCRA_FApp.swift */; };
+		D0DA92192835823000F60437 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92182835823000F60437 /* ContentView.swift */; };
+		D0DA921B2835823200F60437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921A2835823200F60437 /* Assets.xcassets */; };
+		D0DA921E2835823200F60437 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921D2835823200F60437 /* Preview Assets.xcassets */; };
+		D0DA92282835823200F60437 /* SCRA_FTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92272835823200F60437 /* SCRA_FTests.swift */; };
+		D0DA92322835823200F60437 /* SCRA_FUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92312835823200F60437 /* SCRA_FUITests.swift */; };
+		D0DA92342835823200F60437 /* SCRA_FUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D0DA92242835823200F60437 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0DA920B2835823000F60437 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0DA92122835823000F60437;
+			remoteInfo = "SCRA-F";
+		};
+		D0DA922E2835823200F60437 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0DA920B2835823000F60437 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0DA92122835823000F60437;
+			remoteInfo = "SCRA-F";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D0DA92132835823000F60437 /* SCRA-F.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SCRA-F.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0DA92162835823000F60437 /* SCRA_FApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FApp.swift; sourceTree = "<group>"; };
+		D0DA92182835823000F60437 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D0DA921A2835823200F60437 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D0DA921D2835823200F60437 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D0DA92232835823200F60437 /* SCRA-FTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SCRA-FTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0DA92272835823200F60437 /* SCRA_FTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FTests.swift; sourceTree = "<group>"; };
+		D0DA922D2835823200F60437 /* SCRA-FUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SCRA-FUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0DA92312835823200F60437 /* SCRA_FUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITests.swift; sourceTree = "<group>"; };
+		D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D0DA92102835823000F60437 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA92202835823200F60437 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA922A2835823200F60437 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D0DA920A2835823000F60437 = {
+			isa = PBXGroup;
+			children = (
+				D0DA92152835823000F60437 /* SCRA-F */,
+				D0DA92262835823200F60437 /* SCRA-FTests */,
+				D0DA92302835823200F60437 /* SCRA-FUITests */,
+				D0DA92142835823000F60437 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D0DA92142835823000F60437 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D0DA92132835823000F60437 /* SCRA-F.app */,
+				D0DA92232835823200F60437 /* SCRA-FTests.xctest */,
+				D0DA922D2835823200F60437 /* SCRA-FUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D0DA92152835823000F60437 /* SCRA-F */ = {
+			isa = PBXGroup;
+			children = (
+				D0DA92162835823000F60437 /* SCRA_FApp.swift */,
+				D0DA92182835823000F60437 /* ContentView.swift */,
+				D0DA921A2835823200F60437 /* Assets.xcassets */,
+				D0DA921C2835823200F60437 /* Preview Content */,
+			);
+			path = "SCRA-F";
+			sourceTree = "<group>";
+		};
+		D0DA921C2835823200F60437 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				D0DA921D2835823200F60437 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D0DA92262835823200F60437 /* SCRA-FTests */ = {
+			isa = PBXGroup;
+			children = (
+				D0DA92272835823200F60437 /* SCRA_FTests.swift */,
+			);
+			path = "SCRA-FTests";
+			sourceTree = "<group>";
+		};
+		D0DA92302835823200F60437 /* SCRA-FUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D0DA92312835823200F60437 /* SCRA_FUITests.swift */,
+				D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */,
+			);
+			path = "SCRA-FUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D0DA92122835823000F60437 /* SCRA-F */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0DA92372835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-F" */;
+			buildPhases = (
+				D0DA920F2835823000F60437 /* Sources */,
+				D0DA92102835823000F60437 /* Frameworks */,
+				D0DA92112835823000F60437 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SCRA-F";
+			productName = "SCRA-F";
+			productReference = D0DA92132835823000F60437 /* SCRA-F.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D0DA92222835823200F60437 /* SCRA-FTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0DA923A2835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-FTests" */;
+			buildPhases = (
+				D0DA921F2835823200F60437 /* Sources */,
+				D0DA92202835823200F60437 /* Frameworks */,
+				D0DA92212835823200F60437 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0DA92252835823200F60437 /* PBXTargetDependency */,
+			);
+			name = "SCRA-FTests";
+			productName = "SCRA-FTests";
+			productReference = D0DA92232835823200F60437 /* SCRA-FTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D0DA922C2835823200F60437 /* SCRA-FUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0DA923D2835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-FUITests" */;
+			buildPhases = (
+				D0DA92292835823200F60437 /* Sources */,
+				D0DA922A2835823200F60437 /* Frameworks */,
+				D0DA922B2835823200F60437 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0DA922F2835823200F60437 /* PBXTargetDependency */,
+			);
+			name = "SCRA-FUITests";
+			productName = "SCRA-FUITests";
+			productReference = D0DA922D2835823200F60437 /* SCRA-FUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D0DA920B2835823000F60437 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					D0DA92122835823000F60437 = {
+						CreatedOnToolsVersion = 13.3;
+					};
+					D0DA92222835823200F60437 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = D0DA92122835823000F60437;
+					};
+					D0DA922C2835823200F60437 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = D0DA92122835823000F60437;
+					};
+				};
+			};
+			buildConfigurationList = D0DA920E2835823000F60437 /* Build configuration list for PBXProject "SCRA-F" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D0DA920A2835823000F60437;
+			productRefGroup = D0DA92142835823000F60437 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D0DA92122835823000F60437 /* SCRA-F */,
+				D0DA92222835823200F60437 /* SCRA-FTests */,
+				D0DA922C2835823200F60437 /* SCRA-FUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D0DA92112835823000F60437 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0DA921E2835823200F60437 /* Preview Assets.xcassets in Resources */,
+				D0DA921B2835823200F60437 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA92212835823200F60437 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA922B2835823200F60437 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D0DA920F2835823000F60437 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0DA92192835823000F60437 /* ContentView.swift in Sources */,
+				D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA921F2835823200F60437 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0DA92282835823200F60437 /* SCRA_FTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0DA92292835823200F60437 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0DA92342835823200F60437 /* SCRA_FUITestsLaunchTests.swift in Sources */,
+				D0DA92322835823200F60437 /* SCRA_FUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D0DA92252835823200F60437 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0DA92122835823000F60437 /* SCRA-F */;
+			targetProxy = D0DA92242835823200F60437 /* PBXContainerItemProxy */;
+		};
+		D0DA922F2835823200F60437 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0DA92122835823000F60437 /* SCRA-F */;
+			targetProxy = D0DA922E2835823200F60437 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D0DA92352835823200F60437 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D0DA92362835823200F60437 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D0DA92382835823200F60437 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SCRA-F/Preview Content\"";
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-F";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D0DA92392835823200F60437 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SCRA-F/Preview Content\"";
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-F";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D0DA923B2835823200F60437 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-FTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SCRA-F.app/SCRA-F";
+			};
+			name = Debug;
+		};
+		D0DA923C2835823200F60437 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-FTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SCRA-F.app/SCRA-F";
+			};
+			name = Release;
+		};
+		D0DA923E2835823200F60437 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-FUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SCRA-F";
+			};
+			name = Debug;
+		};
+		D0DA923F2835823200F60437 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8T8KL324F4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pa.SCRA-FUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SCRA-F";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D0DA920E2835823000F60437 /* Build configuration list for PBXProject "SCRA-F" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DA92352835823200F60437 /* Debug */,
+				D0DA92362835823200F60437 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0DA92372835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-F" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DA92382835823200F60437 /* Debug */,
+				D0DA92392835823200F60437 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0DA923A2835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-FTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DA923B2835823200F60437 /* Debug */,
+				D0DA923C2835823200F60437 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0DA923D2835823200F60437 /* Build configuration list for PBXNativeTarget "SCRA-FUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DA923E2835823200F60437 /* Debug */,
+				D0DA923F2835823200F60437 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D0DA920B2835823000F60437 /* Project object */;
+}
