@@ -14,9 +14,6 @@
 		D0DA92282835823200F60437 /* SCRA_FTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92272835823200F60437 /* SCRA_FTests.swift */; };
 		D0DA92322835823200F60437 /* SCRA_FUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92312835823200F60437 /* SCRA_FUITests.swift */; };
 		D0DA92342835823200F60437 /* SCRA_FUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */; };
-		D0DA92452835830500F60437 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DA92442835830500F60437 /* GoogleService-Info.plist */; };
-		D0DA92462835830500F60437 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DA92442835830500F60437 /* GoogleService-Info.plist */; };
-		D0DA92472835830500F60437 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DA92442835830500F60437 /* GoogleService-Info.plist */; };
 		D0EE85B92835B907000824DF /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85B82835B907000824DF /* FirebaseAuth */; };
 		D0EE85BB2835B907000824DF /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85BA2835B907000824DF /* FirebaseFirestore */; };
 		D0EE85BD2835B907000824DF /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85BC2835B907000824DF /* FirebaseFirestoreSwift */; };
@@ -24,6 +21,9 @@
 		D0EE85C22835BB67000824DF /* AccountDatabaseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */; };
 		D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C32835BBA7000824DF /* AccountErrors.swift */; };
 		D0EE85C72835BBE1000824DF /* AccountDBOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */; };
+		D0EE85C92835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
+		D0EE85CA2835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
+		D0EE85CB2835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +54,10 @@
 		D0DA922D2835823200F60437 /* SCRA-FUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SCRA-FUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92312835823200F60437 /* SCRA_FUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITests.swift; sourceTree = "<group>"; };
 		D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		D0DA92442835830500F60437 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDatabaseOperations.swift; sourceTree = "<group>"; };
 		D0EE85C32835BBA7000824DF /* AccountErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountErrors.swift; sourceTree = "<group>"; };
 		D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDBOperationsTests.swift; sourceTree = "<group>"; };
+		D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 		D0DA920A2835823000F60437 = {
 			isa = PBXGroup;
 			children = (
-				D0DA92442835830500F60437 /* GoogleService-Info.plist */,
+				D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */,
 				D0DA92152835823000F60437 /* SCRA-F */,
 				D0DA92262835823200F60437 /* SCRA-FTests */,
 				D0DA92302835823200F60437 /* SCRA-FUITests */,
@@ -279,8 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0DA921E2835823200F60437 /* Preview Assets.xcassets in Resources */,
-				D0DA92452835830500F60437 /* GoogleService-Info.plist in Resources */,
 				D0DA921B2835823200F60437 /* Assets.xcassets in Resources */,
+				D0EE85C92835BEA0000824DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +288,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0DA92462835830500F60437 /* GoogleService-Info.plist in Resources */,
+				D0EE85CA2835BEA0000824DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,7 +296,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0DA92472835830500F60437 /* GoogleService-Info.plist in Resources */,
+				D0EE85CB2835BEA0000824DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
