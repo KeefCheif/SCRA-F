@@ -21,7 +21,7 @@ class AccountViewModel: ObservableObject {
     init(user: String?) {
         
         self.accountManager.signInEmail(email: "KeefCheif.dev@gmail.com", password: "testprofile") { [unowned self] (_) in
-            self.accountManager.getAccountInfo { [unowned self] (accountModel, accountError) in
+            self.accountManager.getAccountInfo(username: nil) { [unowned self] (accountModel, accountError) in
                 
                 if let accountModel = accountModel {
                     self.model = accountModel

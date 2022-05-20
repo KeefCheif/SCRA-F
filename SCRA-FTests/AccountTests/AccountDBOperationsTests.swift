@@ -13,7 +13,7 @@ import FirebaseAuth
 class AccountDBOperationsTests: XCTestCase {
     
     override func setUpWithError() throws {
-        FirebaseApp.configure()
+        //FirebaseApp.configure()
     }
     
     func testAccountOperations() throws {
@@ -42,12 +42,13 @@ class AccountDBOperationsTests: XCTestCase {
         
         let getAccountExpectation = XCTestExpectation(description: "get account")
         
-        account.getAccountInfo { (model, error) in
+        account.getAccountInfo(username: nil) { (model, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(model)
             XCTAssertNotNil(model!.username)
             XCTAssertNotNil(model!.displayUsername)
             XCTAssertEqual(model!.displayUsername, "TestUser")
+            XCTAssertFalse(model!.hasProfilePicture)
             getAccountExpectation.fulfill()
         }
         
@@ -55,13 +56,9 @@ class AccountDBOperationsTests: XCTestCase {
         
         let deleteExpectation = XCTestExpectation(description: "delete")
         
-        do {
-            try account.deleteAccount { error in
-                XCTAssertNil(error)
-                deleteExpectation.fulfill()
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        account.deleteAccount { error in
+            XCTAssertNil(error)
+            deleteExpectation.fulfill()
         }
         
         wait(for: [deleteExpectation], timeout: 10)
