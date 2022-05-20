@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		D0092C742836C828009F558C /* AccountProfilePictureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C732836C828009F558C /* AccountProfilePictureManager.swift */; };
+		D0092C762836F280009F558C /* AccountProfilePictureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C752836F280009F558C /* AccountProfilePictureTests.swift */; };
+		D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7728371BF8009F558C /* AccountViewModel.swift */; };
+		D0092C7C28371C9D009F558C /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7B28371C9D009F558C /* AccountView.swift */; };
+		D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7E28371CEA009F558C /* AccountModel.swift */; };
 		D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92162835823000F60437 /* SCRA_FApp.swift */; };
 		D0DA92192835823000F60437 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92182835823000F60437 /* ContentView.swift */; };
 		D0DA921B2835823200F60437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921A2835823200F60437 /* Assets.xcassets */; };
@@ -46,6 +50,10 @@
 
 /* Begin PBXFileReference section */
 		D0092C732836C828009F558C /* AccountProfilePictureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountProfilePictureManager.swift; sourceTree = "<group>"; };
+		D0092C752836F280009F558C /* AccountProfilePictureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountProfilePictureTests.swift; sourceTree = "<group>"; };
+		D0092C7728371BF8009F558C /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		D0092C7B28371C9D009F558C /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		D0092C7E28371CEA009F558C /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		D0DA92132835823000F60437 /* SCRA-F.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SCRA-F.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92162835823000F60437 /* SCRA_FApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FApp.swift; sourceTree = "<group>"; };
 		D0DA92182835823000F60437 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,6 +99,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0092C7928371C31009F558C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D0092C7B28371C9D009F558C /* AccountView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D0092C7A28371C4A009F558C /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				D0EE85C32835BBA7000824DF /* AccountErrors.swift */,
+				D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */,
+				D0092C732836C828009F558C /* AccountProfilePictureManager.swift */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
+		D0092C7D28371CC4009F558C /* MVM */ = {
+			isa = PBXGroup;
+			children = (
+				D0092C7728371BF8009F558C /* AccountViewModel.swift */,
+				D0092C7E28371CEA009F558C /* AccountModel.swift */,
+			);
+			path = MVM;
+			sourceTree = "<group>";
+		};
 		D0DA920A2835823000F60437 = {
 			isa = PBXGroup;
 			children = (
@@ -153,9 +188,9 @@
 		D0EE85C02835BB34000824DF /* Account */ = {
 			isa = PBXGroup;
 			children = (
-				D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */,
-				D0EE85C32835BBA7000824DF /* AccountErrors.swift */,
-				D0092C732836C828009F558C /* AccountProfilePictureManager.swift */,
+				D0092C7D28371CC4009F558C /* MVM */,
+				D0092C7A28371C4A009F558C /* Backend */,
+				D0092C7928371C31009F558C /* Views */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -164,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */,
+				D0092C752836F280009F558C /* AccountProfilePictureTests.swift */,
 			);
 			path = AccountTests;
 			sourceTree = "<group>";
@@ -313,7 +349,10 @@
 				D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */,
 				D0EE85C22835BB67000824DF /* AccountDatabaseOperations.swift in Sources */,
 				D0DA92192835823000F60437 /* ContentView.swift in Sources */,
+				D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */,
 				D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */,
+				D0092C7C28371C9D009F558C /* AccountView.swift in Sources */,
+				D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */,
 				D0092C742836C828009F558C /* AccountProfilePictureManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +363,7 @@
 			files = (
 				D0DA92282835823200F60437 /* SCRA_FTests.swift in Sources */,
 				D0EE85C72835BBE1000824DF /* AccountDBOperationsTests.swift in Sources */,
+				D0092C762836F280009F558C /* AccountProfilePictureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
