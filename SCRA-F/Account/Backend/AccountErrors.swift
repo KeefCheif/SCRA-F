@@ -19,6 +19,7 @@ enum AccountError: Error, LocalizedError {
     case notLoggedIn
     case propogatedError(String)
     case uniqueError(String)
+    case userNotFound(String)
     
     var errorDescription: String? {
         
@@ -41,6 +42,8 @@ enum AccountError: Error, LocalizedError {
             return NSLocalizedString(message, comment: "")
         case .uniqueError(let message):
             return NSLocalizedString(message, comment: "")
+        case .userNotFound(let username):
+            return NSLocalizedString("A user with the username '\(username)' could not be found.", comment: "")
         }
     }
 }
