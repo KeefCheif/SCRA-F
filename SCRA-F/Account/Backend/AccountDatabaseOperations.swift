@@ -14,12 +14,12 @@ struct AccountOperations {
     
     // - - - - - - - - - - R E G I S T E R - - - - - - - - - - //
     
-    public func createAccount(username: String, email: String, password: String, completion: @escaping (AccountErrorType?) -> Void) {
+    public func createAccount(username: String, email: String, password: String, completion: @escaping (AccountError?) -> Void) {
         
         Auth.auth().createUser(withEmail: email, password: password) { (_, error) in
             DispatchQueue.main.async {
                 if let error = error {
-                    completion(AccountErrorType(error: .propogatedError(error.localizedDescription)))
+                    completion(AccountError.propogatedError(error.localizedDescription))
                 } else {
                     
                     // Add their info to the DB
@@ -32,7 +32,7 @@ struct AccountOperations {
                     
                     userDoc.setData(usernameStuff, merge: true) { err in
                         if let _ = error {
-                            completion(AccountErrorType(error: .uniqueError("Failed to set account info.")))
+                            completion(AccountError.uniqueError("Failed to set account info."))
                         } else {
                             do { try Auth.auth().signOut() } catch { print("- - - - - Sign Out Failed - - - - -") }
                             completion(nil)
@@ -132,10 +132,10 @@ struct AccountOperations {
     
     // - - - - - - - - - - G E T  A C C O U N T - - - - - - - - - - //
     
-    public func getAccountInfo(completion: @escaping (AccountModel?, AccountErrorType?) -> Void) {
+    public func getAccountInfo(completion: @escaping (AccountModel?, AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
-            completion(nil, AccountErrorType(error: .notLoggedIn))
+            completion(nil, AccountError.notLoggedIn)
             return
         }
         
@@ -144,18 +144,35 @@ struct AccountOperations {
         userDoc.getDocument { (docSnap, error) in
             
             if let _ = error {
-                completion(nil, AccountErrorType(error: .uniqueError("Failed to get account info.")))
+                completion(nil, AccountError.uniqueError("Failed to get account info."))
             } else if let docSnap = docSnap {
                 
                 let data = docSnap.data()!
                 
-                let username: String? = data["username"] as? String
-                let displayUsername: String? = data["displayUsername"] as? String
+                let username: String = data["username"] as! String
+                let displayUsername: String = data["displayUsername"] as! String
+                let hasProfilePicture: Bool = data["hasProfilePicture"] as? Bool ?? false
                 
-                completion(AccountModel(username: username, displayUsername: displayUsername), nil)
+                if hasProfilePicture {
+                    
+                    AccountProfilePictureManager().getProfilePicture() { (image, imageError) in
+                        
+                        if let imageError = imageError {
+                            completion(nil, imageError)
+                        } else if let image = image {
+                            completion(AccountModel(displayUsername: displayUsername, username: username, hasProfilePicture: true, profilePicture: image), nil)
+                        } else {
+                            completion(nil, AccountError.uniqueError("Failed to download profile picture."))
+                        }
+                        
+                    }
+                    
+                } else {
+                    completion(AccountModel(displayUsername: displayUsername, username: username, hasProfilePicture: false, profilePicture: nil), nil)
+                }
                 
             } else {
-                completion(nil, AccountErrorType(error: .uniqueError("Failed to get account info.")))
+                completion(nil, AccountError.uniqueError("Failed to get account info."))
             }
         }
     }
@@ -166,22 +183,21 @@ struct AccountOperations {
         
         guard Auth.auth().currentUser != nil else { throw AccountError.notLoggedIn }
         
-        self.db.collection("users").document(Auth.auth().currentUser!.uid).delete() { (error) in
-            if let _ = error {
+        let userDoc = db.collection("users").document(Auth.auth().currentUser!.uid)
+        
+        Auth.auth().currentUser!.delete { (deleteError) in
+            if let _ = deleteError {
                 completion(AccountError.uniqueError("Failed to delete account."))
             } else {
-                completion(nil)
+                userDoc.delete() { (error) in
+                    if let _ = error {
+                        completion(AccountError.uniqueError("Failed to delete account."))
+                    } else {
+                        completion(nil)
+                    }
+                }
             }
         }
     }
     
 }
-
-// Temporary
-
-struct AccountModel {
-    
-    var username: String?
-    var displayUsername: String?
-}
-
