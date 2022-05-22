@@ -16,6 +16,8 @@ enum AccountError: Error, LocalizedError {
     
     case loginFailedUsername(String)
     
+    case failedAcceptFriendReq(String)
+    
     case notLoggedIn
     case propogatedError(String)
     case uniqueError(String)
@@ -35,6 +37,9 @@ enum AccountError: Error, LocalizedError {
             
         case .loginFailedUsername(let username):
             return NSLocalizedString("There is no user with the username '\(username)", comment: "")
+            
+        case .failedAcceptFriendReq(let username):
+            return NSLocalizedString("Failed to accept the friend request from '\(username)'", comment: "")
         
         case .notLoggedIn:
             return NSLocalizedString("You are no longer signed in.", comment: "")

@@ -281,5 +281,141 @@ struct AccountOperations {
             }
         }
     }
+    
+    // - - - - - - - - - - F R I E N D   O P E R A T I O N S - - - - - - - - - - //
+    
+    public func sendFriendRequest(username: String, completion: @escaping (AccountError?) -> Void) {
+        
+        guard Auth.auth().currentUser != nil else {
+            completion(AccountError.notLoggedIn)
+            return
+        }
+        
+        // Get the other user's id so the friend request can be send on both ends
+        self.getUserId(username: username) { (id, idError) in
+            if let idError = idError {
+                completion(idError)
+            } else if let id = id {
+                
+                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+                let otherUserDoc = self.db.collection("users").document(id)
+                
+                userDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([id])]) { (sendError) in
+                    if let _ = sendError {
+                        completion(AccountError.uniqueError("Failed to send friend request."))
+                    } else {
+                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([Auth.auth().currentUser!.uid])]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to send friend request."))
+                            } else {
+                                completion(nil)
+                            }
+                        }
+                    }
+                }
+            } else {
+                completion(AccountError.userNotFound(username))
+            }
+        }
+    }
+    
+    public func respondFriendRequest(username: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
+        
+        guard Auth.auth().currentUser != nil else {
+            completion(AccountError.notLoggedIn)
+            return
+        }
+        
+        // Get the other user's id so the friend request can be accepted on both ends
+        self.getUserId(username: username) { (id, idError) in
+            if let idError = idError {
+                completion(idError)
+            } else if let id = id {
+               
+        // Use the other user's id & the current user's id to respond to the request
+                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+                let otherUserDoc = self.db.collection("users").document(id)
+                
+                if accept {
+        
+        // Accept the friend request
+                    userDoc.updateData([
+                        "friends": FieldValue.arrayUnion([id]),
+                        "friendReq": FieldValue.arrayRemove([id])
+                    ]) { (acceptError) in
+                        if let _ = acceptError {
+                            completion(AccountError.failedAcceptFriendReq(username))
+                        } else {
+                            otherUserDoc.updateData([
+                                "friends": FieldValue.arrayUnion([Auth.auth().currentUser!.uid]),
+                                "pendingFriendReq": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])
+                            ]) { (err) in
+                                if let _ = err {
+                                    completion(AccountError.failedAcceptFriendReq(username))
+                                } else {
+                                    completion(nil)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                 
+        // Reject the friend request
+                    userDoc.updateData(["friendReq": FieldValue.arrayRemove([id])]) { (acceptError) in
+                        if let _ = acceptError {
+                            completion(AccountError.failedAcceptFriendReq(username))
+                        } else {
+                            otherUserDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])]) { (err) in
+                                if let _ = err {
+                                    completion(AccountError.failedAcceptFriendReq(username))
+                                } else {
+                                    completion(nil)
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                completion(AccountError.userNotFound(username))
+            }
+        }
+    }
+    
+    public func removeFriend(username: String, completion: @escaping (AccountError?) -> Void) {
+        
+        guard Auth.auth().currentUser != nil else {
+            completion(AccountError.notLoggedIn)
+            return
+        }
+    
+    // Get the other user's id so that the friend can be removed on both accounts
+        self.getUserId(username: username) { (id, idError) in
+            if let idError = idError {
+                completion(idError)
+            } else if let id = id {
+                
+                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+                let otherUserDoc = self.db.collection("users").document(id)
+                
+    // Remove each account from one another's friends list
+                userDoc.updateData(["friends": FieldValue.arrayRemove([id])]) { (sendError) in
+                    if let _ = sendError {
+                        completion(AccountError.uniqueError("Failed to remove friend."))
+                    } else {
+                        otherUserDoc.updateData(["friends": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to remove friend."))
+                            } else {
+                                completion(nil)
+                            }
+                        }
+                    }
+                }
+                
+            } else {
+                completion(AccountError.userNotFound(username))
+            }
+        }
+    }
 
 }
