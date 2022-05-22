@@ -18,6 +18,8 @@ enum AccountError: Error, LocalizedError {
     
     case failedAcceptFriendReq(String)
     
+    case failedSendGameReq(String)
+    
     case notLoggedIn
     case propogatedError(String)
     case uniqueError(String)
@@ -36,10 +38,13 @@ enum AccountError: Error, LocalizedError {
             return NSLocalizedString("Your username is too short. It must be at least 2 characters", comment: "")
             
         case .loginFailedUsername(let username):
-            return NSLocalizedString("There is no user with the username '\(username)", comment: "")
+            return NSLocalizedString("There is no user with the username '\(username)'.", comment: "")
             
         case .failedAcceptFriendReq(let username):
-            return NSLocalizedString("Failed to accept the friend request from '\(username)'", comment: "")
+            return NSLocalizedString("Failed to accept the friend request from '\(username)'.", comment: "")
+            
+        case .failedSendGameReq(let username):
+            return NSLocalizedString("Failed to send the game request to '\(username)'.", comment: <#T##String#>)
         
         case .notLoggedIn:
             return NSLocalizedString("You are no longer signed in.", comment: "")

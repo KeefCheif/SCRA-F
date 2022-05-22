@@ -417,5 +417,139 @@ struct AccountOperations {
             }
         }
     }
-
+    
+    // - - - - - - - - - - G A M E   I N V I T E   O P E R A T I O N S - - - - - - - - - - //
+    
+    public func sendGameInvite(players: [String], from: String, gameId: String, completion: @escaping (AccountError?) -> Void) {
+        
+        guard Auth.auth().currentUser != nil else {
+            completion(AccountError.notLoggedIn)
+            return
+        }
+        
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+        
+        userDoc.updateData(["games": FieldValue.arrayUnion([gameId])]) { _ in
+            self.sendGameInvites(players: players, from: from, gameId: gameId) { (error) in
+                completion(error)
+            }
+        }
+    }
+    
+    private func sendGameInvites(players: [String], from: String, gameId: String, completion: @escaping (AccountError?) -> Void) {
+        
+        guard !players.isEmpty else {
+            completion(nil)
+            return
+        }
+        
+        var temp_players = players
+        let user = temp_players.removeLast()
+        
+        self.getUserId(username: user) { (id, idError) in
+            if let idError = idError {
+                completion(idError)
+            } else if let id = id {
+                
+                let userDoc = self.db.collection("users").document(id)
+                
+                userDoc.updateData([
+                    "pendingGameReq": ["from": from, "gameId": gameId]
+                ]) { (error) in
+                    if let _ = error {
+                        completion(AccountError.failedSendGameReq(user))
+                    } else {
+                        return self.sendGameInvites(players: temp_players, from: from, gameId: gameId) { (reError) in
+                            if let reError = reError {
+                                completion(reError)
+                            } else {
+                                completion(nil)
+                            }
+                        }
+                    }
+                }
+                
+            } else {
+                completion(AccountError.userNotFound(user))
+            }
+        }
+    }
+    
+    // Lots of duplicated code in this function. Investigate further to improve
+    public func respondGameRequest(gameId: String, from: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
+        
+        guard Auth.auth().currentUser != nil else {
+            completion(AccountError.notLoggedIn)
+            return
+        }
+        
+        let userDoc = self.db.collection("user").document(Auth.auth().currentUser!.uid)
+        let gameDoc = self.db.collection("games").document(gameId)
+        
+        if accept {
+            
+            userDoc.updateData([
+                "pendingGameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]]),
+                "games": FieldValue.arrayUnion([gameId])
+            ]) { (error) in
+                if let _ = error {
+                    completion(AccountError.uniqueError("Failed to respond to game invite."))
+                } else {
+                    
+                    if accept {
+                        
+                        gameDoc.updateData([
+                            "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
+                        ]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to update game state."))
+                            }
+                        }
+                        
+                    } else {
+                        
+                        gameDoc.updateData([
+                            "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
+                            "quit": FieldValue.arrayUnion([Auth.auth().currentUser!.uid])
+                        ]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to update game state."))
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } else {
+            
+            userDoc.updateData(["pendingGameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]])]) { error in
+                if let _ = error {
+                    completion(AccountError.uniqueError("Failed to respond to game invite."))
+                } else {
+                    
+                    if accept {
+                        
+                        gameDoc.updateData([
+                            "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
+                        ]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to update game state."))
+                            }
+                        }
+                        
+                    } else {
+                        
+                        gameDoc.updateData([
+                            "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
+                            "quit": FieldValue.arrayUnion([Auth.auth().currentUser!.uid])
+                        ]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to update game state."))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
