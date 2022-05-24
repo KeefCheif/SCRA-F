@@ -44,7 +44,7 @@ enum AccountError: Error, LocalizedError {
             return NSLocalizedString("Failed to accept the friend request from '\(username)'.", comment: "")
             
         case .failedSendGameReq(let username):
-            return NSLocalizedString("Failed to send the game request to '\(username)'.", comment: <#T##String#>)
+            return NSLocalizedString("Failed to send the game request to '\(username)'.", comment: "")
         
         case .notLoggedIn:
             return NSLocalizedString("You are no longer signed in.", comment: "")

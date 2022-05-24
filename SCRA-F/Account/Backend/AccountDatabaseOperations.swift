@@ -476,7 +476,9 @@ struct AccountOperations {
     }
     
     // Lots of duplicated code in this function. Investigate further to improve
-    public func respondGameRequest(gameId: String, from: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
+    public func respondGameRequest(username: String, gameId: String, from: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
+        
+        let gameOperations: GameOperations = GameOperations()
         
         guard Auth.auth().currentUser != nil else {
             completion(AccountError.notLoggedIn)
@@ -498,11 +500,11 @@ struct AccountOperations {
                     
                     if accept {
                         
-                        gameDoc.updateData([
-                            "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
-                        ]) { (err) in
-                            if let _ = err {
-                                completion(AccountError.uniqueError("Failed to update game state."))
+                        gameOperations.addPlayer(username: username, id: Auth.auth().currentUser!.uid, gameId: gameId) { gameError in
+                            if let gameError = gameError {
+                                completion(AccountError.propogatedError(gameError.localizedDescription))
+                            } else {
+                                completion(nil)
                             }
                         }
                         
