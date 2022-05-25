@@ -14,11 +14,17 @@ struct GameOperations {
     
     // - - - - - - - - - - C R E A T E   G A M E - - - - - - - - - - //
     
-    public func newGame(creatorId: String, players: [(String, String)], settings: [String: Any]) -> String {
+    public func newGame(creatorId: String, players: [(String, String)], settings: [String: Any], completion: @escaping (GameError?) -> Void) -> String {
         
         let gameData = self.prepGameData(creatorId: creatorId, players: players, settings: settings)
         
-        let game = self.db.collection("games").addDocument(data: gameData)
+        let game = self.db.collection("games").addDocument(data: gameData) { error in
+            if let _ = error {
+                completion(GameError.createGame)
+            } else {
+                completion(nil)
+            }
+        }
         
         return game.documentID
     }
@@ -65,14 +71,16 @@ struct GameOperations {
         // Add the players to the game info
         for (number, player) in players.enumerated() {
             
-            let playerNum: String = "p" + String(number) + "Score"
+            let playerNum: String = "p" + String(number + 1) + "Score"
             
             if player.0 != creatorId {
-                gameData["waitingFor"] = [gameData["waitingFor"]! as! [String] + [player.0]]
+                var waitList: [String] = gameData["waitingFor"]! as! [String]
+                waitList.append(player.0)
+                gameData["waitingFor"] = waitList
             }
             
             gameData[player.0] = [
-                "playerNumber": number,
+                "playerNumber": number + 1,
                 "letter": [String](),
                 "lostTurn": false
             ]
@@ -86,9 +94,23 @@ struct GameOperations {
         return gameData
     }
     
+    // - - - - - - - - - - D E L E T E   G A M E - - - - - - - - - - //
+    
+    // ~ Note the delete function does not care if each user still has a reference to the game
+    public func deleteGame(gameId: String, completion: @escaping (GameError?) -> Void) {
+        
+        let _ = self.db.collection("games").document(gameId).delete() { error in
+            if let _ = error {
+                completion(GameError.deleteGame)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
     // - - - - - - - - - - G E T   G A M E   I N F O - - - - - - - - - - //
     
-    public func getPlayerData(id: String, gameId: String, completion: @escaping () -> Void) {
+    public func getPlayerGameData(id: String, gameId: String, completion: @escaping () -> Void) {
         
         
         
@@ -102,11 +124,7 @@ struct GameOperations {
             if let _ = error {
                 completion(nil, GameError.getGame)
             } else if let docSnap = docSnap {
-                
-                let data = docSnap.data()!
-                
-                completion(data, nil)
-                
+                completion(docSnap.data(), nil)
             } else {
                 completion(nil, GameError.getGame)
             }
@@ -116,7 +134,7 @@ struct GameOperations {
     
     // - - - - - - - - - - A D D   P L A Y E R - - - - - - - - - //
     
-    func addPlayer(username: String, id: String, gameId: String, completion: @escaping (GameError?) -> Void) {
+    func addPlayer(id: String, gameId: String, completion: @escaping (GameError?) -> Void) {
         
         let gameDoc = self.db.collection("games").document(gameId)
         
@@ -152,7 +170,7 @@ struct GameOperations {
                 var crawler: Int = 1
                 while crawler <= player_count {
                     
-                    let player: String = "player" + String(crawler) + "ID"
+                    let player: String = "player" + String(crawler) + "Id"
                     
                     if settings[player] != nil && settings[player]! as! String == id {
                         break
@@ -169,13 +187,14 @@ struct GameOperations {
                 // Remove the player # that the user was and bump every other player above them down by one
                 // Example: player2 quit, so player3 becomes player2 & player4 becoms player3 and so on
                 while crawler <= player_count - 1 {
-                    settings["player" + String(crawler) + "ID"] = settings["player" + String(crawler + 1) + "ID"]!
+                    settings["player" + String(crawler) + "Id"] = settings["player" + String(crawler + 1) + "Id"]!
                     settings["player" + String(crawler)] = settings["player" + String(crawler + 1)]!
                     state["p" + String(crawler) + "Score"] = state["p" + String(crawler + 1) + "Score"]!
+                    crawler += 1
                 }
                 
                 // Remove the last player from the db since there is now 1 fewer players
-                settings["player" + String(crawler) + "ID"] = nil
+                settings["player" + String(crawler) + "Id"] = nil
                 settings["player" + String(crawler)] = nil
                 settings["playerCount"] = player_count - 1
                 state["p" + String(crawler) + "Score"] = nil
