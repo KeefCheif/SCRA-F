@@ -18,7 +18,7 @@ struct AccountView: View {
         } else {
             VStack {
                 if self.view_model.model.hasProfilePicture {
-                    Image(uiImage: self.view_model.model.profilePicture!)
+                    Image(uiImage: self.view_model.profile_picture!)
                 }
             }
         }

@@ -42,13 +42,15 @@ class AccountDBOperationsTests: XCTestCase {
         
         let getAccountExpectation = XCTestExpectation(description: "get account")
         
-        account.getAccountInfo(username: nil) { (model, error) in
+        account.getAccountInfo(username: nil) { (model, image, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(model)
             XCTAssertNotNil(model!.username)
             XCTAssertNotNil(model!.displayUsername)
             XCTAssertEqual(model!.displayUsername, "TestUser")
             XCTAssertFalse(model!.hasProfilePicture)
+            XCTAssertNotNil(model!.games)
+            XCTAssertEqual(model!.games, [])
             getAccountExpectation.fulfill()
         }
         
@@ -56,12 +58,21 @@ class AccountDBOperationsTests: XCTestCase {
         
         let deleteExpectation = XCTestExpectation(description: "delete")
         
-        account.deleteAccount { error in
+        account.deleteAccount(username: "TestUser") { error in
             XCTAssertNil(error)
             deleteExpectation.fulfill()
         }
         
         wait(for: [deleteExpectation], timeout: 10)
+        
+        let userLookupExpectation = XCTestExpectation(description: "user lookup")
+        
+        account.getAccountInfo(username: "TestUser") { (model, image, error) in
+            XCTAssertNotNil(error)
+            userLookupExpectation.fulfill()
+        }
+        
+        wait(for: [userLookupExpectation], timeout: 10)
     }
 }
 

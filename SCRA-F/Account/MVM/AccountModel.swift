@@ -6,11 +6,21 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct AccountModel {
+struct AccountModel: Codable {
     var displayUsername: String = ""
     var username: String = ""
     var hasProfilePicture: Bool = false
-    var profilePicture: UIImage?
+    
+    var games: [String]?
+    var gameReq: [gameRequest]?
+    
+    var friends: [String]?
+    var friendReq: [String]?
+    var pendingFriendReq: [String]?
+}
+
+struct gameRequest: Codable {
+    var from: String = ""
+    var gameId: String = ""
 }

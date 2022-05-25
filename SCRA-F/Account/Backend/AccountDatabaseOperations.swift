@@ -7,6 +7,7 @@
 
 import Firebase
 import FirebaseAuth
+import SwiftUI
 
 struct AccountOperations {
     
@@ -15,6 +16,8 @@ struct AccountOperations {
     // - - - - - - - - - - R E G I S T E R - - - - - - - - - - //
     
     public func createAccount(username: String, email: String, password: String, completion: @escaping (AccountError?) -> Void) {
+        
+        let lowercased_username: String = username.lowercased()
         
         Auth.auth().createUser(withEmail: email, password: password) { (_, error) in
             DispatchQueue.main.async {
@@ -29,21 +32,26 @@ struct AccountOperations {
                     let userDoc = db.collection("users").document(userId)
                     
                     userLookup.updateData([
-                        "userLookup": FieldValue.arrayUnion([[username: userId]]),
-                        "usernames": FieldValue.arrayUnion([username])
+                        "userLookup": FieldValue.arrayUnion([[lowercased_username: userId]]),
+                        "usernames": FieldValue.arrayUnion([lowercased_username])
                     ]) { (userLookupError) in
                         
                         if let _ = userLookupError {
                             completion(AccountError.uniqueError("Failed to set user lookup info."))
                         } else {
                             
-                            let usernameStuff: [String: Any] = [
-                                "username": username.lowercased(),
+                            let userStuff: [String: Any] = [
+                                "username": lowercased_username,
                                 "displayUsername": username,
-                                "hasProfilePicture": false
+                                "hasProfilePicture": false,
+                                "pendingFriendReq": [],
+                                "friendReq": [],
+                                "friends": [],
+                                "games": [],
+                                "gameReq": []
                             ]
                             
-                            userDoc.setData(usernameStuff, merge: true) { err in
+                            userDoc.setData(userStuff, merge: true) { err in
                                 if let _ = error {
                                     completion(AccountError.uniqueError("Failed to set account info."))
                                 } else {
@@ -147,10 +155,10 @@ struct AccountOperations {
     
     // - - - - - - - - - - G E T   A C C O U N T - - - - - - - - - - //
     
-    public func getAccountInfo(username: String?, completion: @escaping (AccountModel?, AccountError?) -> Void) {
+    public func getAccountInfo(username: String?, completion: @escaping (AccountModel?, UIImage?, AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
-            completion(nil, AccountError.notLoggedIn)
+            completion(nil, nil, AccountError.notLoggedIn)
             return
         }
         
@@ -158,73 +166,81 @@ struct AccountOperations {
         // Get the id of the user first so that it can be used to get that user's info
             self.getUserId(username: username) { (id, error) in
                 if let error = error {
-                    completion(nil, error)
+                    completion(nil, nil, error)
                 } else if let id = id {
         // Get the user's info using the id
-                    self.getAccountInfoID(id: id) { (model, accountError) in
+                    self.getAccountInfoID(id: id) { (model, image, accountError) in
                         if let accountError = accountError {
-                            completion(nil, accountError)
+                            completion(nil, nil, accountError)
                         } else if let model = model {
-                            completion(model, nil)
+                            completion(model, image, nil)
                         } else {
-                            completion(nil, AccountError.uniqueError("Failed to get account info."))
+                            completion(nil, nil, AccountError.uniqueError("Failed to get account info."))
                         }
                     }
                     
                 } else {
-                    completion(nil, AccountError.userNotFound(username))
+                    completion(nil, nil, AccountError.userNotFound(username))
                 }
             }
             
         } else {
         // The user wants their own info, so just use their own id to find their info
-            self.getAccountInfoID(id: Auth.auth().currentUser!.uid) { (model, error) in
+            self.getAccountInfoID(id: Auth.auth().currentUser!.uid) { (model, image, error) in
                 if let error = error {
-                    completion(nil, error)
+                    completion(nil, nil, error)
                 } else if let model = model {
-                    completion(model, nil)
+                    completion(model, image, nil)
                 } else {
-                    completion(nil, AccountError.uniqueError("Failed to get account info."))
+                    completion(nil, nil, AccountError.uniqueError("Failed to get account info."))
                 }
             }
         }
     }
     
-    private func getAccountInfoID(id: String, completion: @escaping (AccountModel?, AccountError?) -> Void) {
+    private func getAccountInfoID(id: String, completion: @escaping (AccountModel?, UIImage?, AccountError?) -> Void) {
         
         let userDoc = self.db.collection("users").document(id)
         
         userDoc.getDocument { (docSnap, error) in
             
             if let _ = error {
-                completion(nil, AccountError.uniqueError("Failed to get account info."))
+                completion(nil, nil, AccountError.uniqueError("Failed to get account info."))
             } else if let docSnap = docSnap {
                 
                 let data = docSnap.data()!
                 
-                let username: String = data["username"] as! String
-                let displayUsername: String = data["displayUsername"] as! String
-                let hasProfilePicture: Bool = data["hasProfilePicture"] as? Bool ?? false
-                
-                if hasProfilePicture {
+                do {
                     
-                    AccountProfilePictureManager().getProfilePicture() { (image, imageError) in
+                    let decoder = JSONDecoder()
+                    
+                    var accountModel: AccountModel?
+                    
+                    let jsonAccount = try JSONSerialization.data(withJSONObject: data)
+                    let decodedSettings = try decoder.decode(AccountModel.self, from: jsonAccount)
+                    accountModel = decodedSettings
+                    
+                    if accountModel != nil && accountModel!.hasProfilePicture {
                         
-                        if let imageError = imageError {
-                            completion(nil, imageError)
-                        } else if let image = image {
-                            completion(AccountModel(displayUsername: displayUsername, username: username, hasProfilePicture: true, profilePicture: image), nil)
-                        } else {
-                            completion(nil, AccountError.uniqueError("Failed to download profile picture."))
+                        AccountProfilePictureManager().getProfilePicture { (image, imageError) in
+                            if let imageError = imageError {
+                                completion(nil, nil, imageError)
+                            } else if let image = image {
+                                completion(accountModel, image, nil)
+                            } else {
+                                completion(nil, nil, AccountError.uniqueError("Failed to download profile picture."))
+                            }
                         }
+                    } else {
+                        completion(accountModel, nil, nil)
                     }
                     
-                } else {
-                    completion(AccountModel(displayUsername: displayUsername, username: username, hasProfilePicture: false, profilePicture: nil), nil)
+                } catch {
+                    completion(nil, nil, AccountError.uniqueError("Failed to decode account info."))
                 }
-                
+    
             } else {
-                completion(nil, AccountError.uniqueError("Failed to get account info."))
+                completion(nil, nil, AccountError.uniqueError("Failed to get account info."))
             }
         }
     }
@@ -258,14 +274,18 @@ struct AccountOperations {
     
     // - - - - - - - - - - D E L E T E   A C C O U N T - - - - - - - - - - //
     
-    public func deleteAccount(completion: @escaping (AccountError?) -> Void) {
+    public func deleteAccount(username: String, completion: @escaping (AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
             completion(AccountError.notLoggedIn)
             return
         }
+        
+        let delete_username: String = username.lowercased()
+        let userId: String = Auth.auth().currentUser!.uid
     
-        let userDoc = db.collection("users").document(Auth.auth().currentUser!.uid)
+        let userDoc = db.collection("users").document(userId)
+        let usernames = db.collection("users").document("usernames")
         
         Auth.auth().currentUser!.delete { (deleteError) in
             if let _ = deleteError {
@@ -275,7 +295,16 @@ struct AccountOperations {
                     if let _ = error {
                         completion(AccountError.uniqueError("Failed to delete account."))
                     } else {
-                        completion(nil)
+                        
+                        usernames.updateData([
+                            "userLookup": FieldValue.arrayRemove([[delete_username: userId]])
+                        ]) { err in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to update user lookup after deleting account."))
+                            } else {
+                                completion(nil)
+                            }
+                        }
                     }
                 }
             }
@@ -454,7 +483,7 @@ struct AccountOperations {
                 let userDoc = self.db.collection("users").document(id)
                 
                 userDoc.updateData([
-                    "pendingGameReq": ["from": from, "gameId": gameId]
+                    "gameReq": ["from": from, "gameId": gameId]
                 ]) { (error) in
                     if let _ = error {
                         completion(AccountError.failedSendGameReq(user))
@@ -491,7 +520,7 @@ struct AccountOperations {
         if accept {
             
             userDoc.updateData([
-                "pendingGameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]]),
+                "gameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]]),
                 "games": FieldValue.arrayUnion([gameId])
             ]) { (error) in
                 if let _ = error {
@@ -500,7 +529,7 @@ struct AccountOperations {
                     
                     if accept {
                         
-                        gameOperations.addPlayer(username: username, id: Auth.auth().currentUser!.uid, gameId: gameId) { gameError in
+                        gameOperations.addPlayer(id: Auth.auth().currentUser!.uid, gameId: gameId) { gameError in
                             if let gameError = gameError {
                                 completion(AccountError.propogatedError(gameError.localizedDescription))
                             } else {
@@ -524,7 +553,7 @@ struct AccountOperations {
             
         } else {
             
-            userDoc.updateData(["pendingGameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]])]) { error in
+            userDoc.updateData(["gameReq": FieldValue.arrayRemove([["from": from, "gameId": gameId]])]) { error in
                 if let _ = error {
                     completion(AccountError.uniqueError("Failed to respond to game invite."))
                 } else {
@@ -553,5 +582,9 @@ struct AccountOperations {
                 }
             }
         }
+    }
+    
+    public func leaveGame(completion: @escaping (AccountError) -> Void) {
+        
     }
 }

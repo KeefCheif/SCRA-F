@@ -10,7 +10,10 @@ import Foundation
 enum GameError: Error, LocalizedError {
     
     case createGame
+    case deleteGame
+    
     case getGame
+    
     case addPlayer
     case removePlayer
     
@@ -19,6 +22,9 @@ enum GameError: Error, LocalizedError {
         switch self {
         case .createGame:
             return NSLocalizedString("Failed to create the game.", comment: "")
+        case .deleteGame:
+            return NSLocalizedString("Failed to delete the game.", comment: "")
+            
         case .getGame:
             return NSLocalizedString("Failed to get game data.", comment: "")
             
