@@ -34,18 +34,14 @@ class GameOperationsTests: XCTestCase {
         // Create new game
         let settings: [String: Any] = [
             "boardType": "default",
-            "lettersType": "default",
+            "letterType": "default",
             "timeRestriction": true,
             "timeLimit": 300,
+            "inactivityTimer": true,
+            "inactivityTimeLimit": 3600,
             "challenges": true,
             "freeChallenges": 1,
-            "playerCount": 3,
-            "player1": "gameTest",
-            "player1Id": Auth.auth().currentUser!.uid,
-            "player2": "gameTest2",
-            "player2Id": "jCin4wabjuT9suzd8ZKb7c3uBgf2",
-            "player3": "gameTest3",
-            "player3Id": "1QPrhdwlWehEg1iqcLvb8KnbEu12"
+            "playerCount": 4
         ]
         
         let newGameExpectation = XCTestExpectation(description: "new game")
@@ -55,35 +51,8 @@ class GameOperationsTests: XCTestCase {
             newGameExpectation.fulfill()
         }
         
-        wait(for: [newGameExpectation], timeout: 15)
+        wait(for: [newGameExpectation], timeout: 10)
         
-        // Add player to the game
-        let addPlayer2Expectation = XCTestExpectation(description: "add player 2")
-        let addPlayer3Expectation = XCTestExpectation(description: "add player 3")
-        
-        gameOperationManager.addPlayer(id: "jCin4wabjuT9suzd8ZKb7c3uBgf2", gameId: gameId) { error in
-            XCTAssertNil(error)
-            addPlayer2Expectation.fulfill()
-        }
-        
-        gameOperationManager.addPlayer(id: "1QPrhdwlWehEg1iqcLvb8KnbEu12", gameId: gameId) { error in
-            XCTAssertNil(error)
-            addPlayer3Expectation.fulfill()
-        }
-        
-        wait(for: [addPlayer2Expectation, addPlayer3Expectation], timeout: 10)
-        
-        // Check waitlist
-        //let getGameExpectation = XCTestExpectation(description: "get game")
-        
-        // Delete Game
-        let deleteGameExpectation = XCTestExpectation(description: "delete game")
-        
-        gameOperationManager.deleteGame(gameId: gameId) { error in
-            XCTAssertNil(error)
-            deleteGameExpectation.fulfill()
-        }
-        
-        wait(for: [deleteGameExpectation], timeout: 10)
+        //
     }
 }

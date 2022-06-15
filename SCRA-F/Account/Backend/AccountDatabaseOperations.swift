@@ -529,15 +529,15 @@ struct AccountOperations {
                     
                     if accept {
                         
-                        gameOperations.addPlayer(id: Auth.auth().currentUser!.uid, gameId: gameId) { gameError in
-                            if let gameError = gameError {
-                                completion(AccountError.propogatedError(gameError.localizedDescription))
+                        gameOperations.acceptGameInvite(id: Auth.auth().currentUser!.uid, gameId: gameId) { acceptReqError in
+                            if let acceptReqError = acceptReqError {
+                                completion(AccountError.propogatedError(acceptReqError.localizedDescription))
                             } else {
                                 completion(nil)
                             }
                         }
                         
-                    } else {
+                    } else { 
                         
                         gameDoc.updateData([
                             "waitingFor": FieldValue.arrayRemove([Auth.auth().currentUser!.uid]),
@@ -545,6 +545,8 @@ struct AccountOperations {
                         ]) { (err) in
                             if let _ = err {
                                 completion(AccountError.uniqueError("Failed to update game state."))
+                            } else {
+                                completion(nil)
                             }
                         }
                     }
