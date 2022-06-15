@@ -16,9 +16,7 @@ struct GameOperations {
     
     public func newGame(creatorId: String, players: [(String, String)], settings: [String: Any], completion: @escaping (GameError?) -> Void) -> String {
         
-        let gameData = self.prepGameData(creatorId: creatorId, players: players, settings: settings)
-        
-        let game = self.db.collection("games").addDocument(data: gameData) { error in
+        let game = self.db.collection("games").addDocument(data: self.prepGameData(creatorId: creatorId, players: players, settings: settings)) { error in
             if let _ = error {
                 completion(GameError.createGame)
             } else {
@@ -29,70 +27,254 @@ struct GameOperations {
         return game.documentID
     }
     
+    
     private func prepGameData(creatorId: String, players: [(String, String)], settings: [String: Any]) -> [String: Any] {
         
-        // Get the board type from the settings
+        // First, get the board and letter bag depending on the game settings
         var board: [String] = [String]()
+        var letters: [String] = [String]()
         
-        let boardType: String = settings["boardType"]! as! String
-        switch boardType {
+        switch settings["boardType"]! as! String {
         case "boostless":
             board = GameInfo.BOOSTLESS_BOARD
         default:
             board = GameInfo.DEFAULT_BOARD
         }
         
-        // Get the letters type from the settings
-        var letters: [String] = [String]()
-        
-        let lettersType: String = settings["lettersType"]! as! String
-        switch lettersType {
+        switch settings["letterType"]! as! String {
         default:
             letters = GameInfo.DEFAULT_LETTER_BAG
         }
         
+        // Second, prep each component of the game: settings, state, waitlist, & player info
+        var gameSettings: [String: Any] = settings
+        
         var gameState: [String: Any] = [
+            "lock": false,
+            "gameStarted": false,
             "board": board,
             "letters": letters,
             "turn": 1,
             "turnStarted": false
         ]
         
-        // Prepare the gameSettings
-        var gameSettings: [String: Any] = settings
-        gameSettings["lettersType"] = nil
-        gameSettings["boardType"] = nil
-        
         var gameData: [String: Any] = [
-            "gameSettings": gameSettings,
-            "waitingFor": [String]()
+            "waitList": [String]()
         ]
         
-        // Add the players to the game info
-        for (number, player) in players.enumerated() {
+        for (index, player) in players.enumerated() {
             
-            let playerNum: String = "p" + String(number + 1) + "Score"
+            let player_number: String = String(index)
             
             if player.0 != creatorId {
-                var waitList: [String] = gameData["waitingFor"]! as! [String]
-                waitList.append(player.0)
-                gameData["waitingFor"] = waitList
+                gameData["waitList"] = gameData["waitList"]! as! [String] + [player.0]
             }
             
-            gameData[player.0] = [
-                "playerNumber": number + 1,
-                "letter": [String](),
+            gameData[creatorId] = [
+                "letters": [String](),
+                "alert": [String](),
                 "lostTurn": false
             ]
             
-            gameState[playerNum] = 0
+            gameState["p" + player_number + "Score"] = 0
+            gameSettings["player" + player_number + "ID"] = player.0
+            gameSettings["player" + player_number] = player.1
         }
         
-        // Add the game state to the game data
         gameData["gameState"] = gameState
+        gameData["gameSettings"] = gameSettings
         
         return gameData
     }
+    
+    // - - - - - - - - - - G E T   G A M E   D A T A - - - - - - - - - - //
+    
+    func getGameModel(gameId: String, id: String, completion: @escaping (GameModel?, GameError?, [String]?) -> Void) {
+        
+        // Use the private method: getGameData to retrieve the entire game document
+        // ~ Note: Might change this by moving the player data out of the game doc and into its own location within each respective user's doc
+        //         This would prevent the app from loading in the game data for every player which it currently does (stored in gameData)
+        
+        self.getGameInfo(gameId: gameId) { (gameData, error) in
+            if let error = error {
+                completion(nil, error, nil)
+            } else if let gameData = gameData {
+                
+                // Get each component from the gameData
+                let waitList: [String]? = gameData["waitList"] as? [String]
+                let settings: [String: Any]? = gameData["gameSettings"] as? [String: Any]
+                let state: [String: Any]? = gameData["gameState"] as? [String: Any]
+                let player: [String: Any]? = gameData[id] as? [String: Any]
+                
+                do {
+                    
+                    let decoder = JSONDecoder()
+                    
+                    if let settings = settings, let state = state, let player = player {
+                        
+                // Convert each component from the game data into its respective model form
+                        let jsonSettings = try JSONSerialization.data(withJSONObject: settings)
+                        let decodedSettings = try decoder.decode(GameSettings.self, from: jsonSettings)
+                        
+                        let jsonState = try JSONSerialization.data(withJSONObject: state)
+                        let decodedState = try decoder.decode(GameState.self, from: jsonState)
+                        
+                        let jsonPlayer = try JSONSerialization.data(withJSONObject: player)
+                        let decodedPlayer = try decoder.decode(GamePlayer.self, from: jsonPlayer)
+                        
+                // Determine if there is a waitlist and complete accordingly: The game cannot start if there is a waitlist
+                        if let waitList = waitList {
+                            completion(GameModel(settings: decodedSettings, state: decodedState, players: decodedPlayer), nil, waitList)
+                        } else {
+                            completion(GameModel(settings: decodedSettings, state: decodedState, players: decodedPlayer), nil, nil)
+                        }
+                        
+                    } else {
+                        throw GameError.getGameModel
+                    }
+                    
+                } catch {
+                    completion(nil, GameError.getGameModel, nil)
+                }
+                
+            } else {
+                completion(nil, GameError.getGame, nil)
+            }
+        }
+    }
+    
+    private func getGameInfo(gameId: String, completion: @escaping ([String: Any]?, GameError?) -> Void) {
+        
+        let gameDoc = self.db.collection("games").document(gameId)
+        
+        gameDoc.getDocument { (docSnap, error) in
+            if let _ = error {
+                completion(nil, GameError.getGame)
+            } else if let docSnap = docSnap {
+                completion(docSnap.data(), nil)
+            } else {
+                completion(nil, GameError.getGame)
+            }
+        }
+    }
+    
+    // - - - - - - - - - - R E S P O N D   G A M E   I N V I T E - - - - - - - - - - //
+    
+    func acceptGameInvite(id: String, gameId: String, completion: @escaping (GameError?) -> Void) {
+        
+        let gameDoc = self.db.collection("games").document(gameId)
+        
+        // Get the entire game document so it can be modified
+        self.getGameInfo(gameId: gameId) { (gameData, error) in
+            if let error = error {
+                completion(error)
+            } else if let gameData = gameData {
+                
+                var state: [String: Any] = gameData["gameState"]! as! [String: Any]
+                var waitList: [String] = gameData["waitList"]! as! [String]
+                
+                if waitList.contains(id) {
+                    waitList.remove(at: waitList.firstIndex(of: id)!)
+                }
+                
+                if waitList.isEmpty {
+                    
+                    state["gameStarted"] = true
+                    
+                    gameDoc.updateData([
+                        "waitList": FieldValue.delete(),
+                        "gameState": state
+                    ])
+                    
+                } else {
+                    gameDoc.updateData([
+                        "waitList": waitList,
+                    ])
+                }
+                
+                completion(nil)
+                
+            } else {
+                completion(GameError.getGame)
+            }
+        }
+    }
+    
+    
+    func rejectGameInvite(id: String, gameId: String, completion: @escaping (GameError?) -> Void) {
+        
+        let gameDoc = self.db.collection("games").document(gameId)
+        
+        self.getGameInfo(gameId: gameId) { (gameData, error) in
+            if let error = error {
+                completion(error)
+            } else if let gameData = gameData {
+                
+                var settings: [String: Any] = gameData["gameSettings"]! as! [String: Any]
+                var state: [String: Any] = gameData["gameSettings"]! as! [String: Any]
+                
+                let player_count: Int = settings["playerCount"]! as! Int
+                var player_number: Int = 1
+                
+            // Determine which player is rejecting the invite. For example, player2
+                while player_number <= player_count {
+                    if settings["player" + String(player_number) + "ID"]! as! String == id {
+                        break
+                    }
+                    player_number += 1
+                }
+                
+            // Push each player above the player who quit down
+            // For example, if player2 quit then player2 would be overwritten with player3 & player3 would be overwritten with player4
+                for i in player_number..<player_count {
+                    
+                    let currentKey: String = String(i)
+                    let nextKey:String = String(i + 1)
+                    
+                    settings["player" + currentKey + "ID"] = settings["player" + nextKey + "ID"]! as! String
+                    settings["player" + currentKey] = settings["player" + nextKey]! as! String
+                    state["p" + currentKey + "Score"] = state["p" + nextKey + "Score"]! as! Int
+                }
+                
+            // Delete the leftover player
+                settings["player" + String(player_count) + "ID"] = nil
+                settings["player" + String(player_count)] = nil
+                state["p" + String(player_count) + "Score"] = nil
+                
+            // Update the waitlist
+                let waitList: [String] = gameData["waitList"]! as! [String]
+                let new_waitList: [String] = waitList.filter { $0 != id }
+                
+            // Save the changes to the DB
+                gameDoc.updateData([
+                    "waitList": new_waitList.isEmpty ? FieldValue.delete() : new_waitList,
+                    "gameSettings": settings,
+                    "gameState": state,
+                    "id": FieldValue.delete()
+                ]) { updateError in
+                    if let _ = updateError {
+                        completion(GameError.removePlayer)
+                    } else {
+                        completion(nil)
+                    }
+                }
+                
+            } else {
+                completion(GameError.getGame)
+            }
+        }
+    }
+    
+    // - - - - - - - - - - E N D  G A M E - - - - - - - - - - //
+    
+    
+    
+}
+
+/*
+struct GameOperations {
+    
+    let db = Firestore.firestore()
     
     // - - - - - - - - - - D E L E T E   G A M E - - - - - - - - - - //
     
@@ -218,3 +400,4 @@ struct GameOperations {
         }
     }
 }
+*/

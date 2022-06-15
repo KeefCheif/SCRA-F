@@ -23,6 +23,7 @@
 		D0DA92282835823200F60437 /* SCRA_FTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92272835823200F60437 /* SCRA_FTests.swift */; };
 		D0DA92322835823200F60437 /* SCRA_FUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92312835823200F60437 /* SCRA_FUITests.swift */; };
 		D0DA92342835823200F60437 /* SCRA_FUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */; };
+		D0E89C6C28511E120099D620 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E89C6B28511E120099D620 /* GameModel.swift */; };
 		D0EE85B92835B907000824DF /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85B82835B907000824DF /* FirebaseAuth */; };
 		D0EE85BB2835B907000824DF /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85BA2835B907000824DF /* FirebaseFirestore */; };
 		D0EE85BD2835B907000824DF /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0EE85BC2835B907000824DF /* FirebaseFirestoreSwift */; };
@@ -72,6 +73,7 @@
 		D0DA922D2835823200F60437 /* SCRA-FUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SCRA-FUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92312835823200F60437 /* SCRA_FUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITests.swift; sourceTree = "<group>"; };
 		D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D0E89C6B28511E120099D620 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDatabaseOperations.swift; sourceTree = "<group>"; };
 		D0EE85C32835BBA7000824DF /* AccountErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountErrors.swift; sourceTree = "<group>"; };
 		D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDBOperationsTests.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		D09CE730283BFFD200A7770B /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				D0E89C6A28511E000099D620 /* MVM */,
 				D09CE731283BFFEA00A7770B /* Backend */,
 			);
 			path = Game;
@@ -227,6 +230,14 @@
 				D0DA92332835823200F60437 /* SCRA_FUITestsLaunchTests.swift */,
 			);
 			path = "SCRA-FUITests";
+			sourceTree = "<group>";
+		};
+		D0E89C6A28511E000099D620 /* MVM */ = {
+			isa = PBXGroup;
+			children = (
+				D0E89C6B28511E120099D620 /* GameModel.swift */,
+			);
+			path = MVM;
 			sourceTree = "<group>";
 		};
 		D0EE85C02835BB34000824DF /* Account */ = {
@@ -395,6 +406,7 @@
 				D0DA92192835823000F60437 /* ContentView.swift in Sources */,
 				D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */,
 				D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */,
+				D0E89C6C28511E120099D620 /* GameModel.swift in Sources */,
 				D09CE733283BFFF900A7770B /* GameOperations.swift in Sources */,
 				D0092C7C28371C9D009F558C /* AccountView.swift in Sources */,
 				D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */,
