@@ -66,6 +66,17 @@ struct AccountOperations {
         }
     }
     
+    public func resetPassword(email: String, completion: @escaping (AccountError?) -> Void) {
+        
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                completion(AccountError.propogatedError(error.localizedDescription))
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
     public func checkUsername(username: String, completion: @escaping (AccountError?) -> Void) {
         
         // Make sure the length of the username is valid

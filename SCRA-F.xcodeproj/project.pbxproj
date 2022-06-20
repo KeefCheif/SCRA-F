@@ -12,7 +12,13 @@
 		D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7728371BF8009F558C /* AccountViewModel.swift */; };
 		D0092C7C28371C9D009F558C /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7B28371C9D009F558C /* AccountView.swift */; };
 		D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0092C7E28371CEA009F558C /* AccountModel.swift */; };
+		D01770CF285A81AF00D48D21 /* LoginManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01770CE285A81AF00D48D21 /* LoginManagerView.swift */; };
+		D01770D2285A826100D48D21 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01770D1285A826100D48D21 /* LoginViewModel.swift */; };
+		D033D176285FFA4F00D98F6D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033D175285FFA4F00D98F6D /* GoogleService-Info.plist */; };
 		D0651DB5283D4FDF005D662A /* GameDBOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0651DB4283D4FDF005D662A /* GameDBOperationsTests.swift */; };
+		D078290E2860F2E200566E10 /* RegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = D078290D2860F2E200566E10 /* RegisterForm.swift */; };
+		D07829112860F6D100566E10 /* LoadingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07829102860F6D100566E10 /* LoadingViews.swift */; };
+		D07829132861032900566E10 /* ResetPasswordForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07829122861032900566E10 /* ResetPasswordForm.swift */; };
 		D09CE733283BFFF900A7770B /* GameOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE732283BFFF900A7770B /* GameOperations.swift */; };
 		D09CE735283C001100A7770B /* GameErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE734283C001100A7770B /* GameErrors.swift */; };
 		D09CE738283C13BA00A7770B /* GameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE737283C13BA00A7770B /* GameInfo.swift */; };
@@ -31,9 +37,6 @@
 		D0EE85C22835BB67000824DF /* AccountDatabaseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */; };
 		D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C32835BBA7000824DF /* AccountErrors.swift */; };
 		D0EE85C72835BBE1000824DF /* AccountDBOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */; };
-		D0EE85C92835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
-		D0EE85CA2835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
-		D0EE85CB2835BEA0000824DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,7 +62,13 @@
 		D0092C7728371BF8009F558C /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		D0092C7B28371C9D009F558C /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		D0092C7E28371CEA009F558C /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
+		D01770CE285A81AF00D48D21 /* LoginManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManagerView.swift; sourceTree = "<group>"; };
+		D01770D1285A826100D48D21 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		D033D175285FFA4F00D98F6D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D0651DB4283D4FDF005D662A /* GameDBOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDBOperationsTests.swift; sourceTree = "<group>"; };
+		D078290D2860F2E200566E10 /* RegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterForm.swift; sourceTree = "<group>"; };
+		D07829102860F6D100566E10 /* LoadingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViews.swift; sourceTree = "<group>"; };
+		D07829122861032900566E10 /* ResetPasswordForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordForm.swift; sourceTree = "<group>"; };
 		D09CE732283BFFF900A7770B /* GameOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOperations.swift; sourceTree = "<group>"; };
 		D09CE734283C001100A7770B /* GameErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameErrors.swift; sourceTree = "<group>"; };
 		D09CE737283C13BA00A7770B /* GameInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfo.swift; sourceTree = "<group>"; };
@@ -77,7 +86,6 @@
 		D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDatabaseOperations.swift; sourceTree = "<group>"; };
 		D0EE85C32835BBA7000824DF /* AccountErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountErrors.swift; sourceTree = "<group>"; };
 		D0EE85C62835BBE1000824DF /* AccountDBOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDBOperationsTests.swift; sourceTree = "<group>"; };
-		D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,12 +144,40 @@
 			path = MVM;
 			sourceTree = "<group>";
 		};
+		D01770CD285A812F00D48D21 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D078290F2860F6BD00566E10 /* UtilityViews */,
+				D01770D0285A81FF00D48D21 /* LoginViews */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		D01770D0285A81FF00D48D21 /* LoginViews */ = {
+			isa = PBXGroup;
+			children = (
+				D01770CE285A81AF00D48D21 /* LoginManagerView.swift */,
+				D01770D1285A826100D48D21 /* LoginViewModel.swift */,
+				D078290D2860F2E200566E10 /* RegisterForm.swift */,
+				D07829122861032900566E10 /* ResetPasswordForm.swift */,
+			);
+			path = LoginViews;
+			sourceTree = "<group>";
+		};
 		D0651DB3283D4FC9005D662A /* GameTests */ = {
 			isa = PBXGroup;
 			children = (
 				D0651DB4283D4FDF005D662A /* GameDBOperationsTests.swift */,
 			);
 			path = GameTests;
+			sourceTree = "<group>";
+		};
+		D078290F2860F6BD00566E10 /* UtilityViews */ = {
+			isa = PBXGroup;
+			children = (
+				D07829102860F6D100566E10 /* LoadingViews.swift */,
+			);
+			path = UtilityViews;
 			sourceTree = "<group>";
 		};
 		D09CE730283BFFD200A7770B /* Game */ = {
@@ -173,7 +209,7 @@
 		D0DA920A2835823000F60437 = {
 			isa = PBXGroup;
 			children = (
-				D0EE85C82835BEA0000824DF /* GoogleService-Info.plist */,
+				D033D175285FFA4F00D98F6D /* GoogleService-Info.plist */,
 				D0DA92152835823000F60437 /* SCRA-F */,
 				D0DA92262835823200F60437 /* SCRA-FTests */,
 				D0DA92302835823200F60437 /* SCRA-FUITests */,
@@ -194,6 +230,7 @@
 		D0DA92152835823000F60437 /* SCRA-F */ = {
 			isa = PBXGroup;
 			children = (
+				D01770CD285A812F00D48D21 /* UI */,
 				D09CE736283C13A700A7770B /* Globals */,
 				D09CE730283BFFD200A7770B /* Game */,
 				D0EE85C02835BB34000824DF /* Account */,
@@ -374,7 +411,7 @@
 			files = (
 				D0DA921E2835823200F60437 /* Preview Assets.xcassets in Resources */,
 				D0DA921B2835823200F60437 /* Assets.xcassets in Resources */,
-				D0EE85C92835BEA0000824DF /* GoogleService-Info.plist in Resources */,
+				D033D176285FFA4F00D98F6D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +419,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0EE85CA2835BEA0000824DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +426,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0EE85CB2835BEA0000824DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,12 +436,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D01770CF285A81AF00D48D21 /* LoginManagerView.swift in Sources */,
 				D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */,
 				D0EE85C22835BB67000824DF /* AccountDatabaseOperations.swift in Sources */,
 				D0DA92192835823000F60437 /* ContentView.swift in Sources */,
 				D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */,
+				D07829132861032900566E10 /* ResetPasswordForm.swift in Sources */,
 				D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */,
+				D01770D2285A826100D48D21 /* LoginViewModel.swift in Sources */,
 				D0E89C6C28511E120099D620 /* GameModel.swift in Sources */,
+				D078290E2860F2E200566E10 /* RegisterForm.swift in Sources */,
+				D07829112860F6D100566E10 /* LoadingViews.swift in Sources */,
 				D09CE733283BFFF900A7770B /* GameOperations.swift in Sources */,
 				D0092C7C28371C9D009F558C /* AccountView.swift in Sources */,
 				D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */,
