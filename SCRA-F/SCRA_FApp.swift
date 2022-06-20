@@ -2,22 +2,25 @@
 //  SCRA_FApp.swift
 //  SCRA-F
 //
-//  Created by peter allgeier on 5/18/22.
+//  Created by KeefCheif on 5/18/22.
 //
 
 import SwiftUI
 import Firebase
+import FirebaseAuth
 
 @main
 struct SCRA_FApp: App {
     
     init() {
         FirebaseApp.configure()
+        
+        try! Auth.auth().signOut()
     }
     
     var body: some Scene {
         WindowGroup {
-            AccountView(view_model: AccountViewModel(user: nil))
+            LoginManagerView(login_manager: LoginManagerViewModel())
         }
     }
 }
