@@ -17,7 +17,7 @@ struct LoginManagerView: View {
     var body: some View {
         
         if self.login_manager.loggedIn {
-            // Home Screen
+            MenuManagerView(menu_manager: MenuViewModel(), loggedIn: self.$login_manager.loggedIn)
         } else {
             
             VStack {

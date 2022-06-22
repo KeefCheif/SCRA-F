@@ -10,6 +10,7 @@ import Foundation
 struct AccountModel: Codable {
     var displayUsername: String = ""
     var username: String = ""
+    
     var hasProfilePicture: Bool = false
     
     var games: [String]?
