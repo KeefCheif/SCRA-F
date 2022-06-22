@@ -147,12 +147,10 @@ struct AccountOperations {
     
     public func signInEmail(email: String, password: String, completion: @escaping (AccountError?) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { (_, error) in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(AccountError.propogatedError(error.localizedDescription))
-                } else {
-                    completion(nil)
-                }
+            if let error = error {
+                completion(AccountError.propogatedError(error.localizedDescription))
+            } else {
+                completion(nil)
             }
         }
     }

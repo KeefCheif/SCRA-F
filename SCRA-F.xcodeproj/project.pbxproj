@@ -19,9 +19,13 @@
 		D078290E2860F2E200566E10 /* RegisterForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = D078290D2860F2E200566E10 /* RegisterForm.swift */; };
 		D07829112860F6D100566E10 /* LoadingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07829102860F6D100566E10 /* LoadingViews.swift */; };
 		D07829132861032900566E10 /* ResetPasswordForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07829122861032900566E10 /* ResetPasswordForm.swift */; };
+		D0803B6128623CE100445A9D /* MenuManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0803B6028623CE100445A9D /* MenuManagerView.swift */; };
+		D0803B6328623D1700445A9D /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0803B6228623D1700445A9D /* MenuViewModel.swift */; };
+		D0803B6528623D2600445A9D /* MenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0803B6428623D2600445A9D /* MenuModel.swift */; };
 		D09CE733283BFFF900A7770B /* GameOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE732283BFFF900A7770B /* GameOperations.swift */; };
 		D09CE735283C001100A7770B /* GameErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE734283C001100A7770B /* GameErrors.swift */; };
 		D09CE738283C13BA00A7770B /* GameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE737283C13BA00A7770B /* GameInfo.swift */; };
+		D0AD51FD28638D9B0042EB66 /* MenuBottomNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD51FC28638D9B0042EB66 /* MenuBottomNav.swift */; };
 		D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92162835823000F60437 /* SCRA_FApp.swift */; };
 		D0DA92192835823000F60437 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92182835823000F60437 /* ContentView.swift */; };
 		D0DA921B2835823200F60437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921A2835823200F60437 /* Assets.xcassets */; };
@@ -69,9 +73,13 @@
 		D078290D2860F2E200566E10 /* RegisterForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterForm.swift; sourceTree = "<group>"; };
 		D07829102860F6D100566E10 /* LoadingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViews.swift; sourceTree = "<group>"; };
 		D07829122861032900566E10 /* ResetPasswordForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordForm.swift; sourceTree = "<group>"; };
+		D0803B6028623CE100445A9D /* MenuManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManagerView.swift; sourceTree = "<group>"; };
+		D0803B6228623D1700445A9D /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		D0803B6428623D2600445A9D /* MenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModel.swift; sourceTree = "<group>"; };
 		D09CE732283BFFF900A7770B /* GameOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOperations.swift; sourceTree = "<group>"; };
 		D09CE734283C001100A7770B /* GameErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameErrors.swift; sourceTree = "<group>"; };
 		D09CE737283C13BA00A7770B /* GameInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfo.swift; sourceTree = "<group>"; };
+		D0AD51FC28638D9B0042EB66 /* MenuBottomNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBottomNav.swift; sourceTree = "<group>"; };
 		D0DA92132835823000F60437 /* SCRA-F.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SCRA-F.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92162835823000F60437 /* SCRA_FApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FApp.swift; sourceTree = "<group>"; };
 		D0DA92182835823000F60437 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -147,6 +155,7 @@
 		D01770CD285A812F00D48D21 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				D0803B5E28623CBE00445A9D /* MenuViews */,
 				D078290F2860F6BD00566E10 /* UtilityViews */,
 				D01770D0285A81FF00D48D21 /* LoginViews */,
 			);
@@ -178,6 +187,17 @@
 				D07829102860F6D100566E10 /* LoadingViews.swift */,
 			);
 			path = UtilityViews;
+			sourceTree = "<group>";
+		};
+		D0803B5E28623CBE00445A9D /* MenuViews */ = {
+			isa = PBXGroup;
+			children = (
+				D0803B6028623CE100445A9D /* MenuManagerView.swift */,
+				D0803B6228623D1700445A9D /* MenuViewModel.swift */,
+				D0803B6428623D2600445A9D /* MenuModel.swift */,
+				D0AD51FC28638D9B0042EB66 /* MenuBottomNav.swift */,
+			);
+			path = MenuViews;
 			sourceTree = "<group>";
 		};
 		D09CE730283BFFD200A7770B /* Game */ = {
@@ -439,10 +459,12 @@
 				D01770CF285A81AF00D48D21 /* LoginManagerView.swift in Sources */,
 				D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */,
 				D0EE85C22835BB67000824DF /* AccountDatabaseOperations.swift in Sources */,
+				D0803B6328623D1700445A9D /* MenuViewModel.swift in Sources */,
 				D0DA92192835823000F60437 /* ContentView.swift in Sources */,
 				D0092C7F28371CEA009F558C /* AccountModel.swift in Sources */,
 				D07829132861032900566E10 /* ResetPasswordForm.swift in Sources */,
 				D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */,
+				D0803B6128623CE100445A9D /* MenuManagerView.swift in Sources */,
 				D01770D2285A826100D48D21 /* LoginViewModel.swift in Sources */,
 				D0E89C6C28511E120099D620 /* GameModel.swift in Sources */,
 				D078290E2860F2E200566E10 /* RegisterForm.swift in Sources */,
@@ -452,6 +474,8 @@
 				D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */,
 				D09CE738283C13BA00A7770B /* GameInfo.swift in Sources */,
 				D09CE735283C001100A7770B /* GameErrors.swift in Sources */,
+				D0AD51FD28638D9B0042EB66 /* MenuBottomNav.swift in Sources */,
+				D0803B6528623D2600445A9D /* MenuModel.swift in Sources */,
 				D0092C742836C828009F558C /* AccountProfilePictureManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
