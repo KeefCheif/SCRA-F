@@ -35,8 +35,8 @@ class LoginManagerViewModel: ObservableObject {
                 self.loginError = AccountErrorType(error: error)
                 self.isLoading = false
             } else {
-                self.isLoading = false
                 self.loggedIn = Auth.auth().currentUser != nil
+                self.isLoading = false
             }
         }
     }

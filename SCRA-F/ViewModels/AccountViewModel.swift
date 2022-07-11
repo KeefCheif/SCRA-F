@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import FirebaseAuth
 
 class AccountViewModel: ObservableObject {
     
@@ -21,14 +22,13 @@ class AccountViewModel: ObservableObject {
     
     init(user: String?) {
         
-        self.accountManager.signInEmail(email: "KeefCheif.dev@gmail.com", password: "testprofile") { [unowned self] (_) in
-            self.accountManager.getAccountInfo(username: nil) { [unowned self] (accountModel, image, accountError) in
-                
-                if let accountModel = accountModel {
-                    self.model = accountModel
-                    self.profile_picture = image
-                    self.isLoading = false
-                }
+        self.accountManager.getAccountInfo(username: nil) { (m, image, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else if let m = m {
+                self.model = m
+                self.profile_picture = image
+                self.isLoading = false
             }
         }
     }

@@ -43,6 +43,7 @@ struct AccountOperations {
                             let userStuff: [String: Any] = [
                                 "username": lowercased_username,
                                 "displayUsername": username,
+                                "id": userId,
                                 "hasProfilePicture": false,
                                 "pendingFriendReq": [],
                                 "friendReq": [],
@@ -231,7 +232,7 @@ struct AccountOperations {
                     
                     if accountModel != nil && accountModel!.hasProfilePicture {
                         
-                        AccountProfilePictureManager().getProfilePicture { (image, imageError) in
+                        AccountProfilePictureManager().getProfilePicture(id: nil) { (image, imageError) in
                             if let imageError = imageError {
                                 completion(nil, nil, imageError)
                             } else if let image = image {
@@ -322,15 +323,44 @@ struct AccountOperations {
     
     // - - - - - - - - - - F R I E N D   O P E R A T I O N S - - - - - - - - - - //
     
-    public func sendFriendRequest(username: String, completion: @escaping (AccountError?) -> Void) {
+    public func sendFriendRequest(id: String, username: String, invitee_username: String, completion: @escaping (AccountError?) -> Void) {
+        
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+        let otherUserDoc = self.db.collection("users").document(id)
+        
+        let userFriendReq = [
+            "displayUsername": invitee_username,
+            "id": id
+        ]
+        
+        let otherUserFriendReq = [
+            "displayUsername": username,
+            "id": Auth.auth().currentUser!.uid
+        ]
+        
+        userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
+            if let _ = sendError {
+                completion(AccountError.uniqueError("Failed to send friend request."))
+            } else {
+                otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
+                    if let _ = err {
+                        completion(AccountError.uniqueError("Failed to send friend request."))
+                    } else {
+                        completion(nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    public func sendFriendRequest(username: String, invitee_username: String, completion: @escaping (AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
             completion(AccountError.notLoggedIn)
             return
         }
         
-        // Get the other user's id so the friend request can be send on both ends
-        self.getUserId(username: username) { (id, idError) in
+        self.getUserId(username: invitee_username.lowercased()) { (id, idError) in
             if let idError = idError {
                 completion(idError)
             } else if let id = id {
@@ -338,11 +368,21 @@ struct AccountOperations {
                 let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
                 let otherUserDoc = self.db.collection("users").document(id)
                 
-                userDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([id])]) { (sendError) in
+                let userFriendReq = [
+                    "displayUsername": invitee_username,
+                    "id": id
+                ]
+                
+                let otherUserFriendReq = [
+                    "displayUsername": username,
+                    "id": Auth.auth().currentUser!.uid
+                ]
+                
+                userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
                     if let _ = sendError {
                         completion(AccountError.uniqueError("Failed to send friend request."))
                     } else {
-                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([Auth.auth().currentUser!.uid])]) { (err) in
+                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
                             if let _ = err {
                                 completion(AccountError.uniqueError("Failed to send friend request."))
                             } else {
@@ -351,107 +391,107 @@ struct AccountOperations {
                         }
                     }
                 }
+                
             } else {
-                completion(AccountError.userNotFound(username))
+                completion(AccountError.userNotFound(invitee_username))
             }
         }
     }
     
-    public func respondFriendRequest(username: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
+    public func respondFriendRequest(id: String, username: String, invitee_username: String, accept: Bool, completion: @escaping (AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
             completion(AccountError.notLoggedIn)
             return
         }
         
-        // Get the other user's id so the friend request can be accepted on both ends
-        self.getUserId(username: username) { (id, idError) in
-            if let idError = idError {
-                completion(idError)
-            } else if let id = id {
-               
         // Use the other user's id & the current user's id to respond to the request
-                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-                let otherUserDoc = self.db.collection("users").document(id)
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+        let otherUserDoc = self.db.collection("users").document(id)
+        
+        let userInvite = [
+            "displayUsername": invitee_username,
+            "id": id
+        ]
+        
+        let otherUserInvite = [
+            "displayUsername": username,
+            "id": Auth.auth().currentUser!.uid
+        ]
                 
-                if accept {
+        if accept {
         
         // Accept the friend request
-                    userDoc.updateData([
-                        "friends": FieldValue.arrayUnion([id]),
-                        "friendReq": FieldValue.arrayRemove([id])
-                    ]) { (acceptError) in
-                        if let _ = acceptError {
-                            completion(AccountError.failedAcceptFriendReq(username))
-                        } else {
-                            otherUserDoc.updateData([
-                                "friends": FieldValue.arrayUnion([Auth.auth().currentUser!.uid]),
-                                "pendingFriendReq": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])
-                            ]) { (err) in
-                                if let _ = err {
-                                    completion(AccountError.failedAcceptFriendReq(username))
-                                } else {
-                                    completion(nil)
-                                }
-                            }
-                        }
-                    }
+            userDoc.updateData([
+                "friends": FieldValue.arrayUnion([userInvite]),
+                "friendReq": FieldValue.arrayRemove([userInvite])
+            ]) { (acceptError) in
+                if let _ = acceptError {
+                    completion(AccountError.failedAcceptFriendReq(invitee_username))
                 } else {
-                 
-        // Reject the friend request
-                    userDoc.updateData(["friendReq": FieldValue.arrayRemove([id])]) { (acceptError) in
-                        if let _ = acceptError {
-                            completion(AccountError.failedAcceptFriendReq(username))
+                    otherUserDoc.updateData([
+                        "friends": FieldValue.arrayUnion([otherUserDoc]),
+                        "pendingFriendReq": FieldValue.arrayRemove([otherUserInvite])
+                    ]) { (err) in
+                        if let _ = err {
+                            completion(AccountError.failedAcceptFriendReq(invitee_username))
                         } else {
-                            otherUserDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])]) { (err) in
-                                if let _ = err {
-                                    completion(AccountError.failedAcceptFriendReq(username))
-                                } else {
-                                    completion(nil)
-                                }
-                            }
+                            completion(nil)
                         }
                     }
                 }
-            } else {
-                completion(AccountError.userNotFound(username))
+            }
+        } else {
+                 
+        // Reject the friend request
+            userDoc.updateData(["friendReq": FieldValue.arrayRemove([userInvite])]) { (acceptError) in
+                if let _ = acceptError {
+                    completion(AccountError.failedAcceptFriendReq(invitee_username))
+                } else {
+                    otherUserDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([otherUserInvite])]) { (err) in
+                        if let _ = err {
+                            completion(AccountError.failedAcceptFriendReq(invitee_username))
+                        } else {
+                            completion(nil)
+                        }
+                    }
+                }
             }
         }
     }
     
-    public func removeFriend(username: String, completion: @escaping (AccountError?) -> Void) {
+    public func removeFriend(id: String, username: String, friend_username: String, completion: @escaping (AccountError?) -> Void) {
         
         guard Auth.auth().currentUser != nil else {
             completion(AccountError.notLoggedIn)
             return
         }
-    
-    // Get the other user's id so that the friend can be removed on both accounts
-        self.getUserId(username: username) { (id, idError) in
-            if let idError = idError {
-                completion(idError)
-            } else if let id = id {
-                
-                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-                let otherUserDoc = self.db.collection("users").document(id)
-                
+        
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+        let otherUserDoc = self.db.collection("users").document(id)
+        
+        let userFriend = [
+            "displayUsername": friend_username,
+            "id": id
+        ]
+        
+        let otherUserFriend = [
+            "displayUsername": username,
+            "id": Auth.auth().currentUser!.uid
+        ]
+        
     // Remove each account from one another's friends list
-                userDoc.updateData(["friends": FieldValue.arrayRemove([id])]) { (sendError) in
-                    if let _ = sendError {
+        userDoc.updateData(["friends": FieldValue.arrayRemove([userFriend])]) { (sendError) in
+            if let _ = sendError {
+                completion(AccountError.uniqueError("Failed to remove friend."))
+            } else {
+                otherUserDoc.updateData(["friends": FieldValue.arrayRemove([otherUserFriend])]) { (err) in
+                    if let _ = err {
                         completion(AccountError.uniqueError("Failed to remove friend."))
                     } else {
-                        otherUserDoc.updateData(["friends": FieldValue.arrayRemove([Auth.auth().currentUser!.uid])]) { (err) in
-                            if let _ = err {
-                                completion(AccountError.uniqueError("Failed to remove friend."))
-                            } else {
-                                completion(nil)
-                            }
-                        }
+                        completion(nil)
                     }
                 }
-                
-            } else {
-                completion(AccountError.userNotFound(username))
             }
         }
     }
@@ -598,4 +638,15 @@ struct AccountOperations {
     public func leaveGame(completion: @escaping (AccountError) -> Void) {
         
     }
+    
+    
+    // - - - - - - - - - - G E T   G A M E   L I S T   I T E M S - - - - - - - - - - //
+    
+    /*
+     When Games & Friends are displayed to a user the app needs the username & profile picture of other relevant users
+     Parameters:        An array of user ids
+     Returns:           An array of UserModel & An array of profile pictures
+     */
+    
+    
 }

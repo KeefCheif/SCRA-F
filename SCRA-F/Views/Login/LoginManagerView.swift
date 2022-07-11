@@ -49,6 +49,7 @@ struct LoginManagerView: View {
                 Button(action: {
                     if !self.login_manager.isLoading {
                         self.login_manager.login(email: self.email, password: self.password)
+                        self.password = ""
                     }
                 }, label: {
                     Text("Login")
@@ -96,10 +97,6 @@ struct LoginManagerView_Previews: PreviewProvider {
         LoginManagerView(login_manager: LoginManagerViewModel())
     }
 }
-
-
-
-
 
 extension TextField {
     func textEntryFormat() -> some View {

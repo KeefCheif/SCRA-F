@@ -15,7 +15,7 @@ struct SCRA_FApp: App {
     init() {
         FirebaseApp.configure()
         
-        try! Auth.auth().signOut()
+        //try! Auth.auth().signOut()
     }
     
     var body: some Scene {

@@ -20,6 +20,8 @@ enum AccountError: Error, LocalizedError {
     
     case failedSendGameReq(String)
     
+    case imageTooLarge
+    
     case notLoggedIn
     case propogatedError(String)
     case uniqueError(String)
@@ -45,6 +47,9 @@ enum AccountError: Error, LocalizedError {
             
         case .failedSendGameReq(let username):
             return NSLocalizedString("Failed to send the game request to '\(username)'.", comment: "")
+            
+        case .imageTooLarge:
+            return NSLocalizedString("The file is too large to upload even after maximum compression.", comment: "")
         
         case .notLoggedIn:
             return NSLocalizedString("You are no longer signed in.", comment: "")
