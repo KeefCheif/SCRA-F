@@ -32,13 +32,6 @@ struct AccountProfilePictureManager {
                 
                 if let _ = error {
                     completion(AccountError.uniqueError("Failed to upload profile picture."))
-                } else {
-            // Get the url for the image and upload it to the user's account in the Firestore DB
-                    
-                    let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-                    userDoc.updateData(["hasProfilePicture": true]) { (_) in
-                        completion(nil)
-                    }
                 }
             }
         } catch {
@@ -57,17 +50,6 @@ struct AccountProfilePictureManager {
             
             if let _ = deleteError {
                 completion(AccountError.uniqueError("Failed to delete profile picture."))
-            } else {
-                
-        // Delete & update the profile picture info for the user's account in Firestore
-                let userDoc = db.collection("users").document(Auth.auth().currentUser!.uid)
-                
-                userDoc.updateData([
-                    "profilePicture": FieldValue.delete(),
-                    "hasProfilePicture": false
-                ]) { (_) in
-                    completion(nil)
-                }
             }
         }
     }

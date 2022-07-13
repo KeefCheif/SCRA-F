@@ -11,7 +11,7 @@ import SwiftUI
 
 class MenuViewModel: ObservableObject {
     
-    @Published var isLoading: Bool = true
+    @Published var isLoading: Bool = false
     @Published var gamesIsLoading: Bool = false
     
     @Published var account_model: AccountModel = AccountModel()
@@ -21,42 +21,19 @@ class MenuViewModel: ObservableObject {
     @Published var profile_picture: UIImage?
     
     @Published var account_error: AccountErrorType?
+    @Published var friends_error: AccountError?
     
-    private var memoized_users: Set<String> = Set<String>()
+    private var momoized_profile_pics: [String: (Bool, UIImage?)] = [String: (Bool, UIImage?)]()
     
     private let accountManager: AccountOperations = AccountOperations()
     private let profilePictureManager: AccountProfilePictureManager = AccountProfilePictureManager()
     private var listener: ListenerRegistration?
     
-    init() {
-        
-        self.accountManager.getAccountInfo(username: nil) { [unowned self] (profile, picture, error) in
-            
-            if let error = error {
-                self.account_error = AccountErrorType(error: error)
-            } else if let profile = profile {
-                
-                self.account_model = profile
-                self.profile_picture = picture
-                
-                self.refreshFriendList(doFriends: true, doFriendReqs: true)
-                
-                self.isLoading = false
-                self.attatchListener()
-                
-                
-            } else {
-                self.account_error = AccountErrorType(error: .uniqueError("Failed to get account info."))
-            }
-            
-            //self.isLoading = false
-        }
-    }
     
-    deinit {
-        if let listener = self.listener {
-            listener.remove()
-        }
+    
+    init() {
+        // Attatch the listener to update the UI to changes made to the users info in the DB
+        self.attatchListener()
     }
     
     private func attatchListener() {
@@ -82,40 +59,46 @@ class MenuViewModel: ObservableObject {
                     let decoder = JSONDecoder()
                     
                     let jsonAccount = try JSONSerialization.data(withJSONObject: data)
-                    let accountModel = try decoder.decode(AccountModel.self, from: jsonAccount)
+                    self.account_model = try decoder.decode(AccountModel.self, from: jsonAccount)
                     
-                    self.account_model = accountModel
+                    if let profile_pic = self.momoized_profile_pics[self.account_model.id] {
+                        self.profile_picture = profile_pic.1
+                    } else {
+                        self.profilePictureManager.getProfilePicture(id: nil) { (pic, _) in
+                            self.profile_picture = pic
+                            self.momoized_profile_pics[self.account_model.id] = (true, pic)
+                        }
+                    }
                     
-                    // Check the new accont model (accountModel) for changes & refresh the view model accordingly
-                    // TO DO
+                    self.refreshFriendList()
+                    //self.isLoading = false
                     
                 } catch {
-                    
+                    print("DECODER ERROR")
                 }
             }
         }
     }
     
+    
+    
     // - - - - - - - - - - F R I E N D   F U N C T I O N S - - - - - - - - - - //
     
-    public func friendRequest(invitee_usernmae: String, completion: @escaping () -> Void) {
+    public func friendRequest(invitee_usernmae: String, completion: @escaping (AccountError?) -> Void) {
         
         guard invitee_usernmae.count >= 2 else {
-            completion()
+            completion(.uniqueError("Please enter a valid username."))
             return
         }
         
-        self.accountManager.sendFriendRequest(username: self.account_model.username, invitee_username: invitee_usernmae) { error in
-            if let error = error {
-                self.account_error = AccountErrorType(error: error)
-            }
-            completion()
+        self.accountManager.sendFriendRequest(username: self.account_model.displayUsername, invitee_username: invitee_usernmae) { error in
+            completion(error)
         }
     }
     
     public func respondFriendRequest(id: String, invitee_username: String, accept: Bool) {
         
-        self.accountManager.respondFriendRequest(id: id, username: self.account_model.username, invitee_username: invitee_username, accept: accept) { error in
+        self.accountManager.respondFriendRequest(id: id, username: self.account_model.displayUsername, invitee_username: invitee_username, accept: accept) { error in
             if let error = error {
                 self.account_error = AccountErrorType(error: error)
             }
@@ -129,6 +112,7 @@ class MenuViewModel: ObservableObject {
     }
     
     
+    
     public func logout(loggedIn: inout Bool) {
         
         do {
@@ -139,199 +123,98 @@ class MenuViewModel: ObservableObject {
         }
     }
     
-    public func changeProfilePicture(picture1: UIImage?) {
+    public func changeProfilePicture(picture: UIImage?) {
         
-        guard picture1 != nil else { return }
+        guard picture != nil else { return }
         
-        let picture: UIImage? = UIImage(named: "Beluga")
+        //let hasFlag: Bool = self.profile_picture != nil
+        self.profile_picture = picture
         
-        if self.account_model.hasProfilePicture {
-            self.profilePictureManager.changeProfilePicture(image: picture!) { error in
-                if let error = error {
-                    self.account_error = AccountErrorType(error: error)
+        self.profilePictureManager.uploadProfilePicture(image: picture!) { error in
+            if let error = error {
+                self.account_error = AccountErrorType(error: error)
+            }
+        }
+    }
+    
+    private func refreshFriendList() {
+        
+        // Refresh the Friend Requests
+        var refreshReqs: [UserModel] = [UserModel]()
+        var newLookup: [String: Int] = [String: Int]()
+        
+        if let friendReqs = self.account_model.friendReq {
+            for (count, friendReq) in friendReqs.enumerated() {
+                
+                if let index = self.friend_model.friendReqLookup[friendReq.id] {
+                    refreshReqs.append(self.friend_model.friendReqs[index])
                 } else {
-                    self.profilePictureManager.getProfilePicture(id: nil) { (image, imageError) in
-                        if let image = image {
-                            self.profile_picture = image
-                        }
-                    }
+                    refreshReqs.append(UserModel(id: friendReq.id, displayUsername: friendReq.displayUsername))
                 }
+                
+                newLookup[friendReq.id] = count
             }
-        } else {
-            self.profilePictureManager.uploadProfilePicture(image: picture!) { error in
-                if let error = error {
-                    self.account_error = AccountErrorType(error: error)
+        }
+        
+        // Refresh the Friends
+        var refreshFriends: [UserModel] = [UserModel]()
+        var newFriendLookup: [String: Int] = [String: Int]()
+        
+        if let friends = self.account_model.friends {
+            for (count, friend) in friends.enumerated() {
+                
+                if let index = self.friend_model.friendLookup[friend.id] {
+                    refreshFriends.append(self.friend_model.friends[index])
                 } else {
-                    self.profilePictureManager.getProfilePicture(id: nil) { (image, imageError) in
-                        if let image = image {
-                            self.profile_picture = image
-                        }
+                    refreshFriends.append(UserModel(id: friend.id, displayUsername: friend.displayUsername))
+                }
+                
+                newFriendLookup[friend.id] = count
+            }
+        }
+        
+        // Make the changes
+        self.friend_model.friendReqs = refreshReqs
+        self.friend_model.friendReqLookup = newLookup
+        self.friend_model.friends = refreshFriends
+        self.friend_model.friendLookup = newFriendLookup
+        
+        // Get the Friend Request's profile pictures
+        for i in 0..<self.friend_model.friendReqs.count {
+            
+            let id: String = self.friend_model.friendReqs[i].id
+            
+            if let picture_info = self.momoized_profile_pics[id] {
+                self.friend_model.friendReqs[i].profilePicture = picture_info.1
+            } else {
+                self.profilePictureManager.getProfilePicture(id: id) { [unowned self] (picture, _) in
+                    
+                    DispatchQueue.main.async {
+                        self.friend_model.friendReqs[i].profilePicture = picture
                     }
-                }
-            }
-        }
-    }
-    
-    
-    private func refreshFriendList(doFriends: Bool, doFriendReqs: Bool) {
-        
-        if doFriends {
-            var refreshedFriends: [UserModel] = [UserModel]()
-            
-            if let friends = self.account_model.friends {
-                for friend in friends {
-                    refreshedFriends.append(UserModel(id: friend.id, displayUsername: friend.displayUsername))
-                }
-            }
-            
-            self.friend_model.friends = refreshedFriends
-            
-            self.getProfilePictures(users: refreshedFriends, returnUsers: [UserModel]()) { (friends, error) in
-                if let friends = friends {
-                    self.friend_model.friends = friends
+                    
+                    self.momoized_profile_pics[id] = (true, picture)
                 }
             }
         }
         
-        if doFriendReqs {
-            var refreshedFriendReqs: [UserModel] = [UserModel]()
+        // Get the Friend's profile pictures
+        for i in 0..<self.friend_model.friends.count {
             
-            if let friendReqs = self.account_model.friendReq {
-                for friendReq in friendReqs {
-                    refreshedFriendReqs.append(UserModel(id: friendReq.id, displayUsername: friendReq.displayUsername))
-                }
-            }
+            let id: String = self.friend_model.friends[i].id
             
-            self.friend_model.friendReqs = refreshedFriendReqs
-            
-            self.getProfilePictures(users: refreshedFriendReqs, returnUsers: [UserModel]()) { (friendReqs, error) in
-                if let friendReqs = friendReqs {
-                    self.friend_model.friendReqs = friendReqs
-                }
-            }
-        }
-    }
-    
-    
-    private func getProfilePictures(users: [UserModel], returnUsers: [UserModel], completion: @escaping ([UserModel]?, AccountError?) -> Void) {
-        
-        guard !users.isEmpty else {
-            completion(returnUsers, nil)
-            return
-        }
-        
-        var new_users: [UserModel] = users
-        
-        var current_user: UserModel = new_users.removeLast()
-        
-        if !self.memoized_users.contains(current_user.id) {
-            
-            self.memoized_users.insert(current_user.id)
-            
-            self.profilePictureManager.getProfilePicture(id: current_user.id) { (image, error) in
-                
-                current_user.profilePicture = image
-                
-                self.getProfilePictures(users: new_users, returnUsers: returnUsers + [current_user]) { (users, re_error) in
-                    completion(users, re_error)
-                }
-            }
-        }
-    }
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-private func refreshGameList() {
-    
-    self.gamesIsLoading = true
-    
-    self.game_model = GameListModel()
-    
-    var refreshedGames: [GameItemModel] = [GameItemModel]()
-    
-    if let games = self.account_model.games {
-        for game in games {
-            
-            var ps: [UserModel] = [UserModel]()
-            
-            for player in game.players {
-                ps.append(UserModel(id: player.id, displayUsername: player.displayUsername))
-            }
-            
-            refreshedGames.append(GameItemModel(players: ps, scores: game.scores, turn: game.turn))
-        }
-    }
-    
-    self.game_model!.games = refreshedGames
-    
-    var refreshedGameReqs: [GameReqItemModel] = [GameReqItemModel]()
-    
-    if let gameReqs = self.account_model.gameReq {
-        for gameReq in gameReqs {
-            
-            var ps: [UserModel] = [UserModel]()
-            
-            for player in gameReq.players {
-                ps.append(UserModel(id: player.id, displayUsername: player.displayUsername))
-            }
-            
-            refreshedGameReqs.append(GameReqItemModel(players: ps, gameType: gameReq.gameType))
-        }
-    }
-    
-    self.game_model!.gameReqs = refreshedGameReqs
-    
-    self.gamesIsLoading = false
-    
-    // - - - - - Get Profile Pictures of players in games - - - - - //
-    
-    for i in 0..<self.game_model!.games.count {
-        for j in 0..<self.game_model!.games[i].players.count {
-            
-            let id: String = self.game_model!.games[i].players[j].id
-            
-            if !self.memoized_users.contains(id) {
-                
-                self.profilePictureManager.getProfilePicture(id: id) { [unowned self] (image, error) in
-                    self.memoized_users.insert(id)
-                    self.game_model!.games[i].players[j].profilePicture = image
-                }
-            }
-        }
-    }
-    
-    for i in 0..<self.game_model!.gameReqs.count {
-        for j in 0..<self.game_model!.gameReqs[i].players.count {
-            
-            let id: String = self.game_model!.gameReqs[i].players[j].id
-            
-            if !self.memoized_users.contains(id) {
-                
-                self.profilePictureManager.getProfilePicture(id: id) { [unowned self] (image, error) in
-                    self.memoized_users.insert(id)
-                    self.game_model!.gameReqs[i].players[j].profilePicture = image
+            if let picture_info = self.momoized_profile_pics[id] {
+                self.friend_model.friends[i].profilePicture = picture_info.1
+            } else {
+                self.profilePictureManager.getProfilePicture(id: id) { [unowned self] (picture, _) in
+                    
+                    DispatchQueue.main.async {
+                        self.friend_model.friends[i].profilePicture = picture
+                    }
+                    
+                    self.momoized_profile_pics[id] = (true, picture)
                 }
             }
         }
     }
 }
- */
