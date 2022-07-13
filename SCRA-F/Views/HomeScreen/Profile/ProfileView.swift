@@ -65,7 +65,7 @@ struct ProfileView: View {
             Text("Would you like to change your profile picture?")
         })
         
-        .sheet(isPresented: self.$showImagePicker, onDismiss: { self.menu_manager.changeProfilePicture(picture1: self.newProfilePicture) }) {
+        .sheet(isPresented: self.$showImagePicker, onDismiss: { self.menu_manager.changeProfilePicture(picture: self.newProfilePicture) }) {
             ImagePicker(image: self.$newProfilePicture, showImagePicker: self.$showImagePicker, sourceType: .photoLibrary)
         }
     }

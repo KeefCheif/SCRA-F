@@ -13,8 +13,6 @@ struct AccountModel: Codable {
     var displayUsername: String = ""
     var username: String = ""
     
-    var hasProfilePicture: Bool = false
-    
     var games: [GameListItem]?
     var gameReq: [GameRequestListItem]?
     

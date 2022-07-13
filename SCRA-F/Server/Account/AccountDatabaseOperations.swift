@@ -31,10 +31,11 @@ struct AccountOperations {
                     let userLookup = self.db.collection("users").document("usernames")
                     let userDoc = db.collection("users").document(userId)
                     
-                    userLookup.updateData([
-                        "userLookup": FieldValue.arrayUnion([[lowercased_username: userId]]),
+                    userLookup.setData([
+                        "displayLookup": [lowercased_username: username],
+                        "userLookup": [lowercased_username: userId],
                         "usernames": FieldValue.arrayUnion([lowercased_username])
-                    ]) { (userLookupError) in
+                    ], merge: true) { (userLookupError) in
                         
                         if let _ = userLookupError {
                             completion(AccountError.uniqueError("Failed to set user lookup info."))
@@ -44,7 +45,6 @@ struct AccountOperations {
                                 "username": lowercased_username,
                                 "displayUsername": username,
                                 "id": userId,
-                                "hasProfilePicture": false,
                                 "pendingFriendReq": [],
                                 "friendReq": [],
                                 "friends": [],
@@ -230,19 +230,14 @@ struct AccountOperations {
                     let decodedSettings = try decoder.decode(AccountModel.self, from: jsonAccount)
                     accountModel = decodedSettings
                     
-                    if accountModel != nil && accountModel!.hasProfilePicture {
-                        
-                        AccountProfilePictureManager().getProfilePicture(id: nil) { (image, imageError) in
-                            if let imageError = imageError {
-                                completion(nil, nil, imageError)
-                            } else if let image = image {
-                                completion(accountModel, image, nil)
-                            } else {
-                                completion(nil, nil, AccountError.uniqueError("Failed to download profile picture."))
-                            }
+                    AccountProfilePictureManager().getProfilePicture(id: nil) { (image, imageError) in
+                        if let imageError = imageError {
+                            completion(nil, nil, imageError)
+                        } else if let image = image {
+                            completion(accountModel, image, nil)
+                        } else {
+                            completion(nil, nil, AccountError.uniqueError("Failed to download profile picture."))
                         }
-                    } else {
-                        completion(accountModel, nil, nil)
                     }
                     
                 } catch {
@@ -273,11 +268,45 @@ struct AccountOperations {
                 if let userIdLookup = userIdLookup {
                     completion(userIdLookup[username], nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil, AccountError.userNotFound(username))
                 }
                 
             } else {
                 completion(nil, AccountError.userNotFound(username))
+            }
+        }
+    }
+    
+    // - - - - - - - - - - G E T   D I S P L A Y    U S E R N A M E - - - - - - - - - - //
+    
+    private func getDisplayUsername(username: String, completion: @escaping (String?, AccountError?) -> Void) {
+        
+        let lowercased_username: String = username.lowercased()
+        let userLookup = self.db.collection("users").document("usernames")
+        
+        userLookup.getDocument { (docSnap, error) in
+            if let _ = error {
+                completion(nil, .userNotFound(lowercased_username))
+            } else if let docSnap = docSnap {
+                
+                let data = docSnap.data()!
+                
+                let displayLookup: [String: String]? = data["displayLookup"] as? [String: String]
+                
+                if let displayLookup = displayLookup {
+                    
+                    if let displayUsername = displayLookup[lowercased_username] {
+                        completion(displayUsername, nil)
+                    } else {
+                        completion(nil, .userNotFound(lowercased_username))
+                    }
+                    
+                } else {
+                    completion(nil, .userNotFound(lowercased_username))
+                }
+                
+            } else {
+                completion(nil, .userNotFound(lowercased_username))
             }
         }
     }
@@ -328,27 +357,37 @@ struct AccountOperations {
         let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
         let otherUserDoc = self.db.collection("users").document(id)
         
-        let userFriendReq = [
-            "displayUsername": invitee_username,
-            "id": id
-        ]
-        
-        let otherUserFriendReq = [
-            "displayUsername": username,
-            "id": Auth.auth().currentUser!.uid
-        ]
-        
-        userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
-            if let _ = sendError {
-                completion(AccountError.uniqueError("Failed to send friend request."))
-            } else {
-                otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
-                    if let _ = err {
+        // First get the correct invitee_username since it is captured case sensitively (Meaning, that the invitee username = whatever the user typed when sent the friend request & USERname != Username)
+        // Therefore, this call converts the case sensitive invitee username into the correct display username
+        self.getDisplayUsername(username: invitee_username) { (displayUsername, error) in
+            if let displayUsername = displayUsername {
+                
+                let userFriendReq = [
+                    "displayUsername": displayUsername,
+                    "id": id
+                ]
+                
+                let otherUserFriendReq = [
+                    "displayUsername": username,
+                    "id": Auth.auth().currentUser!.uid
+                ]
+                
+                userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
+                    if let _ = sendError {
                         completion(AccountError.uniqueError("Failed to send friend request."))
                     } else {
-                        completion(nil)
+                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
+                            if let _ = err {
+                                completion(AccountError.uniqueError("Failed to send friend request."))
+                            } else {
+                                completion(nil)
+                            }
+                        }
                     }
                 }
+                
+            } else {
+                completion(.userNotFound(invitee_username))
             }
         }
     }
@@ -360,11 +399,21 @@ struct AccountOperations {
             return
         }
         
+        // Make sure the user is not friend requesting themself
+        guard username.lowercased() != invitee_username.lowercased() else {
+            completion(AccountError.selfFriendReq)
+            return
+        }
+        
         self.getUserId(username: invitee_username.lowercased()) { (id, idError) in
             if let idError = idError {
                 completion(idError)
             } else if let id = id {
                 
+                self.sendFriendRequest(id: id, username: username, invitee_username: invitee_username) { error in
+                    completion(error)
+                }
+                /*
                 let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
                 let otherUserDoc = self.db.collection("users").document(id)
                 
@@ -391,7 +440,7 @@ struct AccountOperations {
                         }
                     }
                 }
-                
+                */
             } else {
                 completion(AccountError.userNotFound(invitee_username))
             }
@@ -430,7 +479,7 @@ struct AccountOperations {
                     completion(AccountError.failedAcceptFriendReq(invitee_username))
                 } else {
                     otherUserDoc.updateData([
-                        "friends": FieldValue.arrayUnion([otherUserDoc]),
+                        "friends": FieldValue.arrayUnion([otherUserInvite]),
                         "pendingFriendReq": FieldValue.arrayRemove([otherUserInvite])
                     ]) { (err) in
                         if let _ = err {

@@ -14,6 +14,7 @@
 		D01770CF285A81AF00D48D21 /* LoginManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01770CE285A81AF00D48D21 /* LoginManagerView.swift */; };
 		D01770D2285A826100D48D21 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01770D1285A826100D48D21 /* LoginViewModel.swift */; };
 		D055E5B9287C9BDB0030D8D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D055E5B8287C9BDB0030D8D8 /* GoogleService-Info.plist */; };
+		D055E5CF287CA0B60030D8D8 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D055E5CE287CA0B60030D8D8 /* AddFriendView.swift */; };
 		D058AAEB2865459400661CBE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D058AAEA2865459400661CBE /* ProfileView.swift */; };
 		D058AAED2865466000661CBE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D058AAEC2865466000661CBE /* ImagePicker.swift */; };
 		D0651DB5283D4FDF005D662A /* GameDBOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0651DB4283D4FDF005D662A /* GameDBOperationsTests.swift */; };
@@ -28,6 +29,7 @@
 		D09CE738283C13BA00A7770B /* GameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09CE737283C13BA00A7770B /* GameInfo.swift */; };
 		D0AD51FD28638D9B0042EB66 /* MenuBottomNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD51FC28638D9B0042EB66 /* MenuBottomNav.swift */; };
 		D0AD52052863AD600042EB66 /* GameListManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD52042863AD600042EB66 /* GameListManagerView.swift */; };
+		D0CE73BC287DF4F10034196C /* FriendListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE73BB287DF4F10034196C /* FriendListItemView.swift */; };
 		D0D30EC72864FA3B00535D6B /* FriendListManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D30EC62864FA3B00535D6B /* FriendListManagerView.swift */; };
 		D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92162835823000F60437 /* SCRA_FApp.swift */; };
 		D0DA921B2835823200F60437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921A2835823200F60437 /* Assets.xcassets */; };
@@ -70,6 +72,7 @@
 		D01770CE285A81AF00D48D21 /* LoginManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManagerView.swift; sourceTree = "<group>"; };
 		D01770D1285A826100D48D21 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		D055E5B8287C9BDB0030D8D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D055E5CE287CA0B60030D8D8 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		D058AAEA2865459400661CBE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		D058AAEC2865466000661CBE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		D0651DB4283D4FDF005D662A /* GameDBOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDBOperationsTests.swift; sourceTree = "<group>"; };
@@ -84,6 +87,7 @@
 		D09CE737283C13BA00A7770B /* GameInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfo.swift; sourceTree = "<group>"; };
 		D0AD51FC28638D9B0042EB66 /* MenuBottomNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBottomNav.swift; sourceTree = "<group>"; };
 		D0AD52042863AD600042EB66 /* GameListManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListManagerView.swift; sourceTree = "<group>"; };
+		D0CE73BB287DF4F10034196C /* FriendListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListItemView.swift; sourceTree = "<group>"; };
 		D0D30EC62864FA3B00535D6B /* FriendListManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListManagerView.swift; sourceTree = "<group>"; };
 		D0DA92132835823000F60437 /* SCRA-F.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SCRA-F.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92162835823000F60437 /* SCRA_FApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FApp.swift; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 		D055E5C3287C9E0B0030D8D8 /* Friends */ = {
 			isa = PBXGroup;
 			children = (
+				D055E5CD287CA0820030D8D8 /* FriendListSubViews */,
 				D0D30EC62864FA3B00535D6B /* FriendListManagerView.swift */,
 			);
 			path = Friends;
@@ -266,6 +271,15 @@
 				D09CE734283C001100A7770B /* GameErrors.swift */,
 			);
 			path = Errors;
+			sourceTree = "<group>";
+		};
+		D055E5CD287CA0820030D8D8 /* FriendListSubViews */ = {
+			isa = PBXGroup;
+			children = (
+				D055E5CE287CA0B60030D8D8 /* AddFriendView.swift */,
+				D0CE73BB287DF4F10034196C /* FriendListItemView.swift */,
+			);
+			path = FriendListSubViews;
 			sourceTree = "<group>";
 		};
 		D0651DB3283D4FC9005D662A /* GameTests */ = {
@@ -510,8 +524,10 @@
 				D07829112860F6D100566E10 /* LoadingViews.swift in Sources */,
 				D09CE733283BFFF900A7770B /* GameOperations.swift in Sources */,
 				D058AAEB2865459400661CBE /* ProfileView.swift in Sources */,
+				D0CE73BC287DF4F10034196C /* FriendListItemView.swift in Sources */,
 				D0092C7828371BF8009F558C /* AccountViewModel.swift in Sources */,
 				D0AD52052863AD600042EB66 /* GameListManagerView.swift in Sources */,
+				D055E5CF287CA0B60030D8D8 /* AddFriendView.swift in Sources */,
 				D09CE738283C13BA00A7770B /* GameInfo.swift in Sources */,
 				D09CE735283C001100A7770B /* GameErrors.swift in Sources */,
 				D0AD51FD28638D9B0042EB66 /* MenuBottomNav.swift in Sources */,

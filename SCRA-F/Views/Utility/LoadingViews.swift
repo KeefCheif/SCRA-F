@@ -10,6 +10,7 @@ import SwiftUI
 struct GenericLoadingView: View {
     
     var message: String?
+    var size: CGFloat?
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -18,8 +19,8 @@ struct GenericLoadingView: View {
         VStack {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: self.colorScheme == .light ? Color(UIColor.systemGray.withAlphaComponent(0.9)) : Color(UIColor.white.withAlphaComponent(0.9))))
-                .scaleEffect(3)
-                .padding()
+                .scaleEffect(self.size == nil ? 3 : self.size!)
+                .padding(2) // Prevents overlapping if the wheel is next to something
             
             if let message = message {
                 Text(message)

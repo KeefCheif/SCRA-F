@@ -12,6 +12,9 @@ struct FriendListModel {
     
     var friends: [UserModel] = [UserModel]()
     var friendReqs: [UserModel] = [UserModel]()
+    
+    var friendLookup: [String: Int] = [String: Int]()       // Key: ID | Value: Index in array
+    var friendReqLookup: [String: Int] = [String: Int]()
 }
 
 struct GameListModel {
@@ -30,6 +33,7 @@ struct UserModel: Hashable {
 struct GameItemModel {
     
     var players: [UserModel]
+    var gameType: String
     var scores: [Int]
     var turn: Int
 }
