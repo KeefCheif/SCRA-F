@@ -42,16 +42,16 @@ struct FriendListItemView: View {
                 Button(action: {
                     self.menu_manager.respondFriendRequest(id: self.id, invitee_username: self.displayUsername, accept: true)
                 }, label: {
-                    Text("Accept")
-                        .friendListButton(darkMode: self.colorScheme == .dark)
+                    Image(systemName: "checkmark.circle")
+                        .resizable().scaledToFit().frame(width: 40).foregroundColor(Color(uiColor: .systemGreen))
                 })
                 
         // - - - - - Reject Friend Req Button - - - - - //
                 Button(action: {
                     self.menu_manager.respondFriendRequest(id: self.id, invitee_username: self.displayUsername, accept: false)
                 }, label: {
-                    Text("Reject")
-                        .friendListButton(darkMode: self.colorScheme == .dark)
+                    Image(systemName: "x.circle")
+                        .resizable().scaledToFit().frame(width: 40).foregroundColor(Color(uiColor: .systemRed))
                 })
             } else {
                 
