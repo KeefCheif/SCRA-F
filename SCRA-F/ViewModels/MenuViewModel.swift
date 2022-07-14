@@ -56,22 +56,26 @@ class MenuViewModel: ObservableObject {
                 
                 do {
                     
+                    // Convert response from DB into the model
                     let decoder = JSONDecoder()
-                    
                     let jsonAccount = try JSONSerialization.data(withJSONObject: data)
                     self.account_model = try decoder.decode(AccountModel.self, from: jsonAccount)
                     
+                    // Get the user's profile picture & save it
                     if let profile_pic = self.momoized_profile_pics[self.account_model.id] {
                         self.profile_picture = profile_pic.1
                     } else {
-                        self.profilePictureManager.getProfilePicture(id: nil) { (pic, _) in
+                        self.profilePictureManager.getProfilePicture(id: nil) { [unowned self] (pic, _) in
                             self.profile_picture = pic
                             self.momoized_profile_pics[self.account_model.id] = (true, pic)
                         }
                     }
                     
+                    // Prepare Friend & FriendReq info
                     self.refreshFriendList()
-                    //self.isLoading = false
+                    
+                    // Prepare Game & GameReq info
+                    
                     
                 } catch {
                     print("DECODER ERROR")
@@ -81,7 +85,6 @@ class MenuViewModel: ObservableObject {
     }
     
     
-    
     // - - - - - - - - - - F R I E N D   F U N C T I O N S - - - - - - - - - - //
     
     public func friendRequest(invitee_usernmae: String, completion: @escaping (AccountError?) -> Void) {
@@ -89,6 +92,13 @@ class MenuViewModel: ObservableObject {
         guard invitee_usernmae.count >= 2 else {
             completion(.uniqueError("Please enter a valid username."))
             return
+        }
+        
+        for friend in self.friend_model.friends {
+            guard friend.displayUsername.lowercased() != invitee_usernmae.lowercased() else {
+                completion(.alreadyFriends)
+                return
+            }
         }
         
         self.accountManager.sendFriendRequest(username: self.account_model.displayUsername, invitee_username: invitee_usernmae) { error in
@@ -108,32 +118,6 @@ class MenuViewModel: ObservableObject {
     public func removeFriend(id: String, friend_username: String) {
         self.accountManager.removeFriend(id: id, username: self.account_model.displayUsername, friend_username: friend_username) { error in
             
-        }
-    }
-    
-    
-    
-    public func logout(loggedIn: inout Bool) {
-        
-        do {
-            try self.accountManager.singOut()
-            loggedIn = false
-        } catch {
-            loggedIn = false
-        }
-    }
-    
-    public func changeProfilePicture(picture: UIImage?) {
-        
-        guard picture != nil else { return }
-        
-        //let hasFlag: Bool = self.profile_picture != nil
-        self.profile_picture = picture
-        
-        self.profilePictureManager.uploadProfilePicture(image: picture!) { error in
-            if let error = error {
-                self.account_error = AccountErrorType(error: error)
-            }
         }
     }
     
@@ -217,4 +201,40 @@ class MenuViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    
+    // - - - - - - - - - - G A M E   F U N C T I O N S - - - - - - - - - - //
+    
+    private func refreshGameList() {
+        
+        
+        
+    }
+    
+    
+    public func logout(loggedIn: inout Bool) {
+        
+        do {
+            try self.accountManager.singOut()
+            loggedIn = false
+        } catch {
+            loggedIn = false
+        }
+    }
+    
+    public func changeProfilePicture(picture: UIImage?) {
+        
+        guard picture != nil else { return }
+        
+        //let hasFlag: Bool = self.profile_picture != nil
+        self.profile_picture = picture
+        
+        self.profilePictureManager.uploadProfilePicture(image: picture!) { error in
+            if let error = error {
+                self.account_error = AccountErrorType(error: error)
+            }
+        }
+    }
+
 }
