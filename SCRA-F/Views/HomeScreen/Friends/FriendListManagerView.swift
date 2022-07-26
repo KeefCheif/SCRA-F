@@ -19,22 +19,19 @@ struct FriendListManagerView: View {
     var body: some View {
         
         VStack {
-            
     // - - - - - Friend Request Button - - - - - //
             AddFriendView(menu_manager: menu_manager)
             
             Divider()
             
     // - - - - - List Friends & Friend Requests - - - - - //
-            ForEach(0..<self.menu_manager.friend_model.friendReqs.count + self.menu_manager.friend_model.friends.count, id: \.self) { index in
+            
+            ForEach(0..<self.menu_manager.friends_model.friendReqs.count + self.menu_manager.friends_model.friends.count, id: \.self) { index in
                 
-                if index < self.menu_manager.friend_model.friendReqs.count {
-                
-                    FriendListItemView(menu_manager: self.menu_manager, isFriendReq: true, displayUsername: self.menu_manager.friend_model.friendReqs[index].displayUsername, id: self.menu_manager.friend_model.friendReqs[index].id, picture: self.menu_manager.friend_model.friendReqs[index].profilePicture)
-                    
+                if index < self.menu_manager.friends_model.friendReqs.count {
+                    FriendListItemView(menu_manager: self.menu_manager, isFriendReq: true, displayUsername: self.menu_manager.friends_model.friendReqs[index].displayUsername, id: self.menu_manager.friends_model.friendReqs[index].id, picture: self.menu_manager.friends_model.friendReqs[index].profile_picture)
                 } else {
-                
-                    FriendListItemView(menu_manager: self.menu_manager, isFriendReq: false, displayUsername: self.menu_manager.friend_model.friends[index - self.menu_manager.friend_model.friendReqs.count].displayUsername, id: self.menu_manager.friend_model.friends[index - self.menu_manager.friend_model.friendReqs.count].id, picture: self.menu_manager.friend_model.friends[index - self.menu_manager.friend_model.friendReqs.count].profilePicture)
+                    FriendListItemView(menu_manager: self.menu_manager, isFriendReq: false, displayUsername: self.menu_manager.friends_model.friends[index - self.menu_manager.friends_model.friendReqs.count].displayUsername, id: self.menu_manager.friends_model.friends[index - self.menu_manager.friends_model.friendReqs.count].id, picture: self.menu_manager.friends_model.friends[index - self.menu_manager.friends_model.friendReqs.count].profile_picture)
                 }
             }
             

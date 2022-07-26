@@ -8,6 +8,44 @@
 import Foundation
 import SwiftUI
 
+struct MenuAccountModel {
+    
+    var id: String = ""
+    var displayUsername: String = ""
+    var username: String = ""
+    var profile_picture: UIImage?
+}
+
+struct MenuAccountFriendModel {
+    
+    var friends: [MenuAccountModel]
+    var friendReqs: [MenuAccountModel]
+}
+
+struct MenuAccountGamesModel {
+    
+    var games: [MenuAccountGameModel]
+    var gameReqs: [MenuAccountGameReqModel]
+}
+
+struct MenuAccountGameModel {
+    
+    var players: [MenuAccountModel]
+    var scores: [Int]
+    var turn: Int
+    var gameType: String
+}
+
+struct MenuAccountGameReqModel {
+    
+    var players: [MenuAccountModel]
+    var gameType: String
+}
+
+
+
+
+
 struct FriendListModel {
     
     var friends: [UserModel] = [UserModel]()

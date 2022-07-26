@@ -18,6 +18,7 @@ enum AccountError: Error, LocalizedError {
     
     case selfFriendReq
     case alreadyFriends
+    case alreadyFriendRequest
     case failedAcceptFriendReq(String)
     
     case failedSendGameReq(String)
@@ -48,6 +49,8 @@ enum AccountError: Error, LocalizedError {
             return NSLocalizedString("You cannot send a friend request to yourself.", comment: "")
         case .alreadyFriends:
             return NSLocalizedString("You cannot send a friend request to this user because you are already friends.", comment: "")
+        case .alreadyFriendRequest:
+            return NSLocalizedString("You cannot send a friend request to this user becuase you already have a friend request from them.", comment: "")
         case .failedAcceptFriendReq(let username):
             return NSLocalizedString("Failed to accept the friend request from '\(username)'.", comment: "")
             
