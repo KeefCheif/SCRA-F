@@ -31,6 +31,8 @@
 		D0AD52052863AD600042EB66 /* GameListManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AD52042863AD600042EB66 /* GameListManagerView.swift */; };
 		D0CE73BC287DF4F10034196C /* FriendListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE73BB287DF4F10034196C /* FriendListItemView.swift */; };
 		D0D30EC72864FA3B00535D6B /* FriendListManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D30EC62864FA3B00535D6B /* FriendListManagerView.swift */; };
+		D0D693402880A1BF003950F0 /* testNewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6933F2880A1BF003950F0 /* testNewAccount.swift */; };
+		D0D693422880A5CF003950F0 /* newAccountTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D693412880A5CF003950F0 /* newAccountTestView.swift */; };
 		D0DA92172835823000F60437 /* SCRA_FApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA92162835823000F60437 /* SCRA_FApp.swift */; };
 		D0DA921B2835823200F60437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921A2835823200F60437 /* Assets.xcassets */; };
 		D0DA921E2835823200F60437 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0DA921D2835823200F60437 /* Preview Assets.xcassets */; };
@@ -89,6 +91,8 @@
 		D0AD52042863AD600042EB66 /* GameListManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListManagerView.swift; sourceTree = "<group>"; };
 		D0CE73BB287DF4F10034196C /* FriendListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListItemView.swift; sourceTree = "<group>"; };
 		D0D30EC62864FA3B00535D6B /* FriendListManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListManagerView.swift; sourceTree = "<group>"; };
+		D0D6933F2880A1BF003950F0 /* testNewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testNewAccount.swift; sourceTree = "<group>"; };
+		D0D693412880A5CF003950F0 /* newAccountTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newAccountTestView.swift; sourceTree = "<group>"; };
 		D0DA92132835823000F60437 /* SCRA-F.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SCRA-F.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA92162835823000F60437 /* SCRA_FApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCRA_FApp.swift; sourceTree = "<group>"; };
 		D0DA921A2835823200F60437 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -258,6 +262,7 @@
 		D055E5C9287C9F160030D8D8 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				D0D6933E2880A18F003950F0 /* test */,
 				D0EE85C12835BB67000824DF /* AccountDatabaseOperations.swift */,
 				D0092C732836C828009F558C /* AccountProfilePictureManager.swift */,
 			);
@@ -296,6 +301,15 @@
 				D09CE737283C13BA00A7770B /* GameInfo.swift */,
 			);
 			path = Globals;
+			sourceTree = "<group>";
+		};
+		D0D6933E2880A18F003950F0 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				D0D6933F2880A1BF003950F0 /* testNewAccount.swift */,
+				D0D693412880A5CF003950F0 /* newAccountTestView.swift */,
+			);
+			path = test;
 			sourceTree = "<group>";
 		};
 		D0DA920A2835823000F60437 = {
@@ -508,6 +522,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D693422880A5CF003950F0 /* newAccountTestView.swift in Sources */,
+				D0D693402880A1BF003950F0 /* testNewAccount.swift in Sources */,
 				D01770CF285A81AF00D48D21 /* LoginManagerView.swift in Sources */,
 				D0EE85C42835BBA7000824DF /* AccountErrors.swift in Sources */,
 				D058AAED2865466000661CBE /* ImagePicker.swift in Sources */,

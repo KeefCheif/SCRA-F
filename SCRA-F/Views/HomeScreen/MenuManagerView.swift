@@ -18,12 +18,12 @@ struct MenuManagerView: View {
     
     var body: some View {
         
-        if self.menu_manager.isLoading {
+        if self.menu_manager.account_model == nil {
             GenericLoadingView()
         } else {
          
             VStack {
-                
+
                 Button(action: {
                     self.menu_manager.logout(loggedIn: &self.loggedIn)
                 }, label: {
@@ -33,7 +33,7 @@ struct MenuManagerView: View {
                 TabView(selection: self.$tabIndex) {
                     Text("games")
                         .tag(0)
-                        
+                    
                     FriendListManagerView(menu_manager: self.menu_manager)
                         .tag(1)
                         
@@ -44,7 +44,7 @@ struct MenuManagerView: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 
         // - - - - - Bottom Nav - - - - - //
-                MenuBottomNav(tabIndex: self.$tabIndex, profile_picture: self.menu_manager.profile_picture)
+                MenuBottomNav(tabIndex: self.$tabIndex, profile_picture: self.menu_manager.account_model!.profile_picture)
             }
             
         }

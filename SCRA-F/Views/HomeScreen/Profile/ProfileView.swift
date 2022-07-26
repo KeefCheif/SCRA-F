@@ -26,7 +26,7 @@ struct ProfileView: View {
                     Button(action: {
                         self.showPickerAlert = true
                     }, label: {
-                        if let profile_picture = self.menu_manager.profile_picture {
+                        if let profile_picture = self.menu_manager.account_model!.profile_picture{
                             Image(uiImage: profile_picture)
                                 .resizable()
                                 .scaledToFit()
@@ -41,7 +41,7 @@ struct ProfileView: View {
                         }
                     })
                     
-                    Text(self.menu_manager.account_model.displayUsername)
+                    Text(self.menu_manager.account_model!.displayUsername)
                 }
                 
                 Spacer()

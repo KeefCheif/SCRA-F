@@ -41,22 +41,31 @@ struct AccountOperations {
                             completion(AccountError.uniqueError("Failed to set user lookup info."))
                         } else {
                             
-                            let userStuff: [String: Any] = [
+                            let social_collection = userDoc.collection("social")
+                            
+                            social_collection.document("friends").setData([
+                                "friends": [],
+                                "friendReqs": []
+                            ])
+                            
+                            social_collection.document("games").setData([
+                                "games": [],
+                                "gameReqs": []
+                            ])
+
+                            userDoc.setData([
                                 "username": lowercased_username,
                                 "displayUsername": username,
                                 "id": userId,
-                                "pendingFriendReq": [],
-                                "friendReq": [],
-                                "friends": [],
-                                "games": [],
-                                "gameReq": []
-                            ]
-                            
-                            userDoc.setData(userStuff, merge: true) { err in
+                            ], merge: true) { err in
                                 if let _ = error {
                                     completion(AccountError.uniqueError("Failed to set account info."))
                                 } else {
-                                    do { try Auth.auth().signOut() } catch { print("- - - - - Sign Out Failed - - - - -") }
+                                    do {
+                                        try Auth.auth().signOut()
+                                    } catch {
+                                        print("- - - - - Sign Out Failed - - - - -")
+                                    }
                                     completion(nil)
                                 }
                             }
@@ -198,11 +207,11 @@ struct AccountOperations {
         // The user wants their own info, so just use their own id to find their info
             self.getAccountInfoID(id: Auth.auth().currentUser!.uid) { (model, image, error) in
                 if let error = error {
-                    completion(nil, nil, error)
+                    completion(model, nil, error)
                 } else if let model = model {
                     completion(model, image, nil)
                 } else {
-                    completion(nil, nil, AccountError.uniqueError("Failed to get account info."))
+                    completion(model, nil, AccountError.uniqueError("Failed to get account info."))
                 }
             }
         }
@@ -222,21 +231,16 @@ struct AccountOperations {
                 
                 do {
                     
-                    let decoder = JSONDecoder()
-                    
-                    var accountModel: AccountModel?
-                    
                     let jsonAccount = try JSONSerialization.data(withJSONObject: data)
-                    let decodedSettings = try decoder.decode(AccountModel.self, from: jsonAccount)
-                    accountModel = decodedSettings
+                    let accountModel: AccountModel = try JSONDecoder().decode(AccountModel.self, from: jsonAccount)
                     
-                    AccountProfilePictureManager().getProfilePicture(id: nil) { (image, imageError) in
+                    AccountProfilePictureManager().getProfilePicture(id: id) { (image, imageError) in
                         if let imageError = imageError {
-                            completion(nil, nil, imageError)
+                            completion(accountModel, nil, imageError)
                         } else if let image = image {
                             completion(accountModel, image, nil)
                         } else {
-                            completion(nil, nil, AccountError.uniqueError("Failed to download profile picture."))
+                            completion(accountModel, nil, AccountError.uniqueError("Failed to download profile picture."))
                         }
                     }
                     
@@ -352,42 +356,21 @@ struct AccountOperations {
     
     // - - - - - - - - - - F R I E N D   O P E R A T I O N S - - - - - - - - - - //
     
-    public func sendFriendRequest(id: String, username: String, invitee_username: String, completion: @escaping (AccountError?) -> Void) {
+    public func sendFriendRequest(id: String, username: String, completion: @escaping (AccountError?) -> Void) {
         
-        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-        let otherUserDoc = self.db.collection("users").document(id)
+        let otherUserDoc = self.db.collection("users").document(id).collection("social").document("friends")
         
-        // First get the correct invitee_username since it is captured case sensitively (Meaning, that the invitee username = whatever the user typed when sent the friend request & USERname != Username)
-        // Therefore, this call converts the case sensitive invitee username into the correct display username
-        self.getDisplayUsername(username: invitee_username) { (displayUsername, error) in
-            if let displayUsername = displayUsername {
-                
-                let userFriendReq = [
-                    "displayUsername": displayUsername,
-                    "id": id
-                ]
-                
-                let otherUserFriendReq = [
-                    "displayUsername": username,
-                    "id": Auth.auth().currentUser!.uid
-                ]
-                
-                userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
-                    if let _ = sendError {
-                        completion(AccountError.uniqueError("Failed to send friend request."))
-                    } else {
-                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
-                            if let _ = err {
-                                completion(AccountError.uniqueError("Failed to send friend request."))
-                            } else {
-                                completion(nil)
-                            }
-                        }
-                    }
-                }
-                
+        let friendReq = [
+            "displayUsername": username,
+            "id": Auth.auth().currentUser!.uid,
+            "username": username.lowercased()
+        ]
+        
+        otherUserDoc.updateData(["friendReqs": FieldValue.arrayUnion([friendReq])]) { (err) in
+            if let _ = err {
+                completion(AccountError.uniqueError("Failed to send friend request."))
             } else {
-                completion(.userNotFound(invitee_username))
+                completion(nil)
             }
         }
     }
@@ -410,37 +393,10 @@ struct AccountOperations {
                 completion(idError)
             } else if let id = id {
                 
-                self.sendFriendRequest(id: id, username: username, invitee_username: invitee_username) { error in
+                self.sendFriendRequest(id: id, username: username) { error in
                     completion(error)
                 }
-                /*
-                let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-                let otherUserDoc = self.db.collection("users").document(id)
                 
-                let userFriendReq = [
-                    "displayUsername": invitee_username,
-                    "id": id
-                ]
-                
-                let otherUserFriendReq = [
-                    "displayUsername": username,
-                    "id": Auth.auth().currentUser!.uid
-                ]
-                
-                userDoc.updateData(["pendingFriendReq": FieldValue.arrayUnion([userFriendReq])]) { (sendError) in
-                    if let _ = sendError {
-                        completion(AccountError.uniqueError("Failed to send friend request."))
-                    } else {
-                        otherUserDoc.updateData(["friendReq": FieldValue.arrayUnion([otherUserFriendReq])]) { (err) in
-                            if let _ = err {
-                                completion(AccountError.uniqueError("Failed to send friend request."))
-                            } else {
-                                completion(nil)
-                            }
-                        }
-                    }
-                }
-                */
             } else {
                 completion(AccountError.userNotFound(invitee_username))
             }
@@ -455,17 +411,19 @@ struct AccountOperations {
         }
         
         // Use the other user's id & the current user's id to respond to the request
-        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-        let otherUserDoc = self.db.collection("users").document(id)
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid).collection("social").document("friends")
+        let otherUserDoc = self.db.collection("users").document(id).collection("social").document("friends")
         
         let userInvite = [
             "displayUsername": invitee_username,
-            "id": id
+            "id": id,
+            "username": invitee_username.lowercased()
         ]
         
         let otherUserInvite = [
             "displayUsername": username,
-            "id": Auth.auth().currentUser!.uid
+            "id": Auth.auth().currentUser!.uid,
+            "username": username.lowercased()
         ]
                 
         if accept {
@@ -473,14 +431,13 @@ struct AccountOperations {
         // Accept the friend request
             userDoc.updateData([
                 "friends": FieldValue.arrayUnion([userInvite]),
-                "friendReq": FieldValue.arrayRemove([userInvite])
+                "friendReqs": FieldValue.arrayRemove([userInvite])
             ]) { (acceptError) in
                 if let _ = acceptError {
                     completion(AccountError.failedAcceptFriendReq(invitee_username))
                 } else {
                     otherUserDoc.updateData([
                         "friends": FieldValue.arrayUnion([otherUserInvite]),
-                        "pendingFriendReq": FieldValue.arrayRemove([otherUserInvite])
                     ]) { (err) in
                         if let _ = err {
                             completion(AccountError.failedAcceptFriendReq(invitee_username))
@@ -493,17 +450,11 @@ struct AccountOperations {
         } else {
                  
         // Reject the friend request
-            userDoc.updateData(["friendReq": FieldValue.arrayRemove([userInvite])]) { (acceptError) in
+            userDoc.updateData(["friendReqs": FieldValue.arrayRemove([userInvite])]) { (acceptError) in
                 if let _ = acceptError {
                     completion(AccountError.failedAcceptFriendReq(invitee_username))
                 } else {
-                    otherUserDoc.updateData(["pendingFriendReq": FieldValue.arrayRemove([otherUserInvite])]) { (err) in
-                        if let _ = err {
-                            completion(AccountError.failedAcceptFriendReq(invitee_username))
-                        } else {
-                            completion(nil)
-                        }
-                    }
+                    completion(nil)
                 }
             }
         }
@@ -516,17 +467,19 @@ struct AccountOperations {
             return
         }
         
-        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-        let otherUserDoc = self.db.collection("users").document(id)
+        let userDoc = self.db.collection("users").document(Auth.auth().currentUser!.uid).collection("social").document("friends")
+        let otherUserDoc = self.db.collection("users").document(id).collection("social").document("friends")
         
         let userFriend = [
             "displayUsername": friend_username,
-            "id": id
+            "id": id,
+            "username": friend_username.lowercased()
         ]
         
         let otherUserFriend = [
             "displayUsername": username,
-            "id": Auth.auth().currentUser!.uid
+            "id": Auth.auth().currentUser!.uid,
+            "username": username.lowercased()
         ]
         
     // Remove each account from one another's friends list

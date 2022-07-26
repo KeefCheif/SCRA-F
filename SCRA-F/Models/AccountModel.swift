@@ -12,31 +12,31 @@ struct AccountModel: Codable {
     var id: String = ""
     var displayUsername: String = ""
     var username: String = ""
-    
-    var games: [GameListItem]?
-    var gameReq: [GameRequestListItem]?
-    
-    var friends: [FriendModel]?
-    var friendReq: [FriendModel]?
-    var pendingFriendReq: [FriendModel]?
 }
 
-struct FriendModel: Codable, Hashable {
+struct AccountFriendsModel: Codable {
     
-    var displayUsername: String
-    var id: String
+    var friends: [AccountModel]
+    var friendReqs: [AccountModel]
 }
 
-struct GameRequestListItem: Codable, Hashable {
+struct AccountGamesModel: Codable {
     
-    var players: [FriendModel] = [FriendModel]()
-    var gameType: String = ""
+    var games: [AccountGameModel]
+    var gameReqs: [AccountGameReqModel]
 }
 
-struct GameListItem: Codable {
+struct AccountGameModel: Codable {
     
-    var players: [FriendModel] = [FriendModel]()
-
-    var scores: [Int] = [Int]()
-    var turn: Int = 1
+    var players: [AccountModel]
+    var scores: [Int]
+    var turn: Int
+    var gameType: String
 }
+
+struct AccountGameReqModel: Codable {
+    
+    var players: [AccountModel]
+    var gameType: String
+}
+
